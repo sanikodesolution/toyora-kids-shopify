@@ -1,0 +1,336 @@
+/* Toyora Kids — Product page layout matching PDP mockup */
+
+.template-product .m-main-product {
+  font-family: var(--toyora-font-body, 'Nunito', sans-serif);
+  color: var(--toyora-dark, #2a1b4d);
+}
+
+.template-product .m-product-title {
+  font-family: var(--toyora-font-display, 'Fredoka', sans-serif);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--toyora-dark, #1b1636);
+  line-height: 1.15;
+}
+
+.template-product .product-block-group--title .m-product-wishlist {
+  display: none !important;
+}
+
+.template-product .product-block-group--tags {
+  gap: 8px;
+  margin-bottom: 4px;
+}
+
+.template-product .m-product-tag {
+  border-radius: 999px;
+  padding: 5px 12px;
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 1.3;
+}
+
+.template-product .m-price-item--sale,
+.template-product .m-price--on-sale .m-price-item--sale {
+  color: #ff3366;
+  font-weight: 800;
+}
+
+.template-product .m-price-item--regular {
+  color: #9aa0b0;
+}
+
+.template-product .m-price__badge-sale .m-product-tag {
+  background: #ffe4ec;
+  color: #ff3366;
+  box-shadow: none;
+}
+
+.template-product .m-product-meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.template-product .m-product-meta li {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin: 0;
+}
+
+.template-product .m-product-availability {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-weight: 700;
+}
+
+.template-product .m-product-availability:not(.m-product-availability--outofstock) {
+  color: #22a45a;
+}
+
+.template-product .main-product__block-addons,
+.template-product .main-product__block-shipping {
+  display: none !important;
+}
+
+/* Features */
+.toyora-pdp-features {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px 16px;
+}
+
+.toyora-pdp-features__item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+}
+
+.toyora-pdp-features__icon {
+  width: 34px;
+  height: 34px;
+  border-radius: 10px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  color: #fff;
+}
+
+.toyora-pdp-features__icon svg {
+  width: 18px;
+  height: 18px;
+}
+
+.toyora-pdp-features__label {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--toyora-dark, #2a1b4d);
+  line-height: 1.25;
+}
+
+.toyora-pdp-features__icon--purple { background: #7b6cff; }
+.toyora-pdp-features__icon--green { background: #2ecf6b; }
+.toyora-pdp-features__icon--pink { background: #ff5aa5; }
+.toyora-pdp-features__icon--blue { background: #3d9dff; }
+.toyora-pdp-features__icon--orange { background: #ffb020; }
+.toyora-pdp-features__icon--red { background: #ff5a4e; }
+
+/* Trust row */
+.toyora-pdp-trust {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+  padding: 6px 0 4px;
+}
+
+.toyora-pdp-trust__item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 4px;
+}
+
+.toyora-pdp-trust__icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #fff3e8;
+  color: #ff6a3d;
+}
+
+.toyora-pdp-trust__icon svg {
+  width: 18px;
+  height: 18px;
+}
+
+.toyora-pdp-trust__title {
+  display: block;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--toyora-dark, #2a1b4d);
+}
+
+.toyora-pdp-trust__sub {
+  display: block;
+  font-size: 10px;
+  color: #8a8498;
+  line-height: 1.3;
+}
+
+/* Actions: qty + ATC / Buy now / Wishlist */
+.toyora-pdp-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
+}
+
+.toyora-pdp-actions__row {
+  display: flex;
+  align-items: stretch;
+  gap: 12px;
+  width: 100%;
+}
+
+.toyora-pdp-actions .m-product-form--input {
+  margin: 0;
+  flex: 0 0 auto;
+}
+
+.toyora-pdp-actions .m-product-option--label {
+  display: none;
+}
+
+.template-product .toyora-pdp-actions .m-quantity {
+  display: flex;
+  align-items: center;
+  height: 52px;
+  width: 118px;
+  border: 1px solid #e6e2ee;
+  border-radius: 14px;
+  background: #fff;
+  overflow: hidden;
+}
+
+.template-product .toyora-pdp-actions .m-quantity__button {
+  width: 36px;
+  height: 52px;
+  border: 0;
+  background: transparent;
+  color: #2a1b4d;
+  cursor: pointer;
+}
+
+.template-product .toyora-pdp-actions .m-quantity__button svg {
+  width: 10px;
+  height: 10px;
+}
+
+.template-product .toyora-pdp-actions .m-quantity__input {
+  width: 36px;
+  height: 52px;
+  padding: 0;
+  border: 0;
+  box-shadow: none;
+  font-weight: 700;
+  font-size: 16px;
+  color: #2a1b4d;
+  -moz-appearance: textfield;
+}
+
+.template-product .toyora-pdp-actions .m-quantity__input::-webkit-outer-spin-button,
+.template-product .toyora-pdp-actions .m-quantity__input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.toyora-pdp-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  min-height: 52px;
+  padding: 0 18px;
+  border-radius: 14px;
+  border: 0;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  text-decoration: none;
+  line-height: 1;
+  transition: transform 0.15s ease, box-shadow 0.15s ease, opacity 0.15s ease;
+}
+
+.toyora-pdp-btn:hover {
+  transform: translateY(-1px);
+}
+
+.toyora-pdp-btn svg {
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+}
+
+.toyora-pdp-btn--atc,
+.template-product .toyora-pdp-btn--atc.m-add-to-cart {
+  flex: 1 1 auto;
+  width: 100%;
+  color: #fff !important;
+  background: linear-gradient(90deg, #ff3366 0%, #ff8c40 100%) !important;
+  box-shadow: 0 8px 18px rgba(255, 51, 102, 0.28);
+}
+
+.toyora-pdp-btn--buy {
+  width: 100%;
+  color: #fff;
+  background: linear-gradient(90deg, #6a5bff 0%, #4f7dff 100%);
+  box-shadow: 0 8px 18px rgba(99, 91, 255, 0.28);
+}
+
+.toyora-pdp-btn--wishlist {
+  width: 100%;
+  color: #28a745;
+  background: #fff;
+  border: 1.5px solid #28a745;
+  box-shadow: none;
+}
+
+.toyora-pdp-btn--wishlist.added-to-wishlist {
+  background: #eefaf1;
+}
+
+.toyora-pdp-btn.disabled,
+.toyora-pdp-btn:disabled {
+  opacity: 0.55;
+  pointer-events: none;
+  transform: none;
+  box-shadow: none;
+}
+
+.template-product .toyora-pdp-actions .m-add-to-cart.m-button {
+  margin: 0;
+  min-width: 0;
+  border: 0;
+}
+
+.template-product .toyora-pdp-actions .m-product-dynamic-checkout {
+  display: none !important;
+}
+
+@media screen and (max-width: 749px) {
+  .toyora-pdp-trust {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px 8px;
+  }
+
+  .toyora-pdp-actions__row {
+    flex-wrap: nowrap;
+  }
+
+  .template-product .toyora-pdp-actions .m-quantity {
+    width: 104px;
+  }
+
+  .toyora-pdp-btn {
+    font-size: 12px;
+    letter-spacing: 0.04em;
+    padding: 0 12px;
+  }
+}

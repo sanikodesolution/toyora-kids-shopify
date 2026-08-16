@@ -23,11 +23,26 @@
           "settings": {
           }
         },
+        "rating": {
+          "type": "rating",
+          "settings": {
+          }
+        },
         "price": {
           "type": "price",
           "settings": {
-            "show_saving": false,
+            "show_saving": true,
             "sale_badge_type": "percentage"
+          }
+        },
+        "meta": {
+          "type": "meta",
+          "settings": {
+            "show_collections": false,
+            "show_vendor": false,
+            "show_type": false,
+            "show_availability": true,
+            "show_sku": true
           }
         },
         "variant_picker": {
@@ -36,32 +51,17 @@
             "size_title": "Size"
           }
         },
-        "buy_buttons": {
-          "type": "buy_buttons",
+        "toyora_features": {
+          "type": "toyora_features",
           "settings": {
-            "show_quantity_selector": true,
-            "show_atc_button": true,
-            "show_dynamic_checkout": true,
-            "show_gift_card_recipient": true
-          }
-        },
-        "addons": {
-          "type": "addons",
-          "settings": {
-            "show_atcp": true,
-            "show_ask_a_question": true,
-            "show_social": true
-          }
-        },
-        "shipping_VBJFtx": {
-          "type": "shipping",
-          "settings": {
-            "show_delivery_times": true,
-            "deliver_text": "Estimated Delivery:",
-            "deliver_days": "7",
-            "date_format": "%b %d",
-            "show_shipping_text": true,
-            "shipping_text": "<p><strong>Free Shipping & Returns: <\/strong>On all orders over $75<\/p>"
+            "feature_1": "4 Wheel Drive",
+            "feature_2": "Rechargeable Battery",
+            "feature_3": "360° Rotation",
+            "feature_4": "Light & Music",
+            "feature_5": "LED Lights",
+            "feature_6": "Durable & Shockproof",
+            "feature_7": "High Speed",
+            "feature_8": ""
           }
         },
         "trust_badge_NyBMd4": {
@@ -71,17 +71,27 @@
             "trust_badges_image_width": "60%",
             "position": "below"
           }
+        },
+        "buy_buttons": {
+          "type": "buy_buttons",
+          "settings": {
+            "show_quantity_selector": true,
+            "show_atc_button": true,
+            "show_dynamic_checkout": false,
+            "show_gift_card_recipient": true
+          }
         }
       },
       "block_order": [
         "badge_ChqgGj",
         "title",
+        "rating",
         "price",
+        "meta",
         "variant_picker",
-        "buy_buttons",
-        "addons",
-        "shipping_VBJFtx",
-        "trust_badge_NyBMd4"
+        "toyora_features",
+        "trust_badge_NyBMd4",
+        "buy_buttons"
       ],
       "settings": {
         "container": "container",

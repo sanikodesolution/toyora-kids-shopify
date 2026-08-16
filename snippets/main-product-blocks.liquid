@@ -146,12 +146,12 @@
           {% endif %}
           {% if block.settings.show_availability %}
             <li>
-              <span class="m-product-meta--label">{{ 'products.product.availability' | t }}:</span>
               <div
                 class="m-product-meta--value m-product-availability{% unless selected_variant.available %} m-product-availability--outofstock{% endunless %}"
                 data-availability
               >
                 {%- if selected_variant.available -%}
+                  <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><circle cx="8" cy="8" r="8" fill="#22a45a"/><path d="M4.8 8.2 7 10.3 11.3 5.8" stroke="#fff" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
                   {{- 'products.product.in_stock' | t -}}
                 {%- else -%}
                   {% render 'new-locale', key: 'products.product.out_of_stock' %}
@@ -346,52 +346,72 @@
               {%- render 'gift-card-recipient-form', product: product, form: form, section: section -%}
             {%- endif -%}
 
-            <div class="m-product-form--wrapper m:display-flex m:flex-wrap m:items-end">
-              {% if block.settings.show_quantity_selector %}
-                <div class="m-product-form--input">
-                  <label class="m-product-option--label">
-                    {{ 'products.product.quantity' | t }}
-                  </label>
-                  {% render 'product-qty-input', product_form_id: product_form_id, product: product %}
-                </div>
-              {% endif %}
-              {% if block.settings.show_atc_button %}
-                {% liquid
-                  assign btn_class = 'm-button--primary'
-                  if show_dynamic_checkout
-                    assign btn_class = 'm-button--secondary'
-                  endif
-                %}
-                <button
-                  type="submit"
-                  name="add"
-                  class="m-add-to-cart m-spinner-button m-button {{ btn_class }} {% unless product.selected_or_first_available_variant.available %}disabled{% endunless %}"
-                  data-atc-text="{{ 'products.product.add_to_cart' | t }}"
-                >
-                  <span class="m-spinner-icon">
-                    <svg
-                      class="animate-spin m-svg-icon"
-                      xmlns="http://www.w3.org/2000/svg"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                    >
-                      <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                      <path fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                    </svg>
-                  </span>
-                  <span class="m-add-to-cart--text">
-                    {% if product.selected_or_first_available_variant.available %}
-                      {{ 'products.product.add_to_cart' | t }}
-                    {% else %}
-                      {{ 'products.product.sold_out' | t }}
-                    {% endif %}
-                  </span>
-                </button>
-                {% if section.settings.show_atwl and section.settings.layout == 'layout-7' %}
-                  <div class="m-product-wishlist m:hidden md:m:block">
-                    {% render 'tooltip', type: 'wishlist', class_name: 'm-tooltip--top' %}
+            <div class="toyora-pdp-actions">
+              <div class="toyora-pdp-actions__row">
+                {% if block.settings.show_quantity_selector %}
+                  <div class="m-product-form--input">
+                    <label class="m-product-option--label m:visually-hidden">
+                      {{ 'products.product.quantity' | t }}
+                    </label>
+                    {% render 'product-qty-input', product_form_id: product_form_id, product: product %}
                   </div>
                 {% endif %}
+                {% if block.settings.show_atc_button %}
+                  <button
+                    type="submit"
+                    name="add"
+                    class="toyora-pdp-btn toyora-pdp-btn--atc m-add-to-cart m-spinner-button {% unless product.selected_or_first_available_variant.available %}disabled{% endunless %}"
+                    data-atc-text="{{ 'products.product.add_to_cart' | t }}"
+                  >
+                    <span class="m-spinner-icon">
+                      <svg
+                        class="animate-spin m-svg-icon"
+                        xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                      >
+                        <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                        <path fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                      </svg>
+                    </span>
+                    <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                      <path d="M6 6h15l-1.5 9h-12L6 6z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
+                      <path d="M6 6 5 3H2" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+                      <circle cx="9" cy="20" r="1.4" fill="currentColor"/>
+                      <circle cx="18" cy="20" r="1.4" fill="currentColor"/>
+                    </svg>
+                    <span class="m-add-to-cart--text">
+                      {% if product.selected_or_first_available_variant.available %}
+                        {{ 'products.product.add_to_cart' | t }}
+                      {% else %}
+                        {{ 'products.product.sold_out' | t }}
+                      {% endif %}
+                    </span>
+                  </button>
+                {% endif %}
+              </div>
+              {% if product.selected_or_first_available_variant.available %}
+                <button type="button" class="toyora-pdp-btn toyora-pdp-btn--buy" data-toyora-buy-now>
+                  <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                    <path d="M13 2 4 14h7l-1 8 10-14h-7l0-6z"/>
+                  </svg>
+                  <span>Buy Now</span>
+                </button>
+              {% endif %}
+              {% if section.settings.show_atwl %}
+                <button
+                  type="button"
+                  class="toyora-pdp-btn toyora-pdp-btn--wishlist m-wishlist-button"
+                  data-product-handle="{{ product.handle }}"
+                  aria-label="{{ 'products.product.add_to_wishlist' | t }}"
+                >
+                  <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                    <path d="M12.1 20.3S4 15.1 4 9.8A4.6 4.6 0 0 1 8.7 5.2c1.5 0 2.6.7 3.4 1.8.8-1.1 1.9-1.8 3.4-1.8A4.6 4.6 0 0 1 20.2 9.8c0 5.3-8.1 10.5-8.1 10.5z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
+                  </svg>
+                  <span class="m-wishlist-button-text" data-revert-text="{{ 'products.product.remove_from_wishlist' | t }}">
+                    {{ 'products.product.add_to_wishlist' | t }}
+                  </span>
+                </button>
               {% endif %}
               {% liquid
                 assign show_terms = false
@@ -411,6 +431,38 @@
                 </div>
               {% endif %}
             </div>
+            <script>
+              if (!window.toyoraBuyNowBound) {
+                window.toyoraBuyNowBound = true;
+                document.addEventListener('click', function (event) {
+                  var buyNow = event.target.closest('[data-toyora-buy-now]');
+                  if (!buyNow) return;
+                  event.preventDefault();
+                  var form = buyNow.closest('form');
+                  if (!form) return;
+                  buyNow.disabled = true;
+                  var formData = new FormData(form);
+                  var addUrl = (window.MinimogSettings && window.MinimogSettings.routes && window.MinimogSettings.routes.cart_add_url) || '/cart/add.js';
+                  fetch(addUrl, {
+                    method: 'POST',
+                    headers: { 'X-Requested-With': 'XMLHttpRequest', Accept: 'application/json' },
+                    body: formData
+                  })
+                    .then(function (response) { return response.json(); })
+                    .then(function (data) {
+                      if (data && data.status) {
+                        buyNow.disabled = false;
+                        return;
+                      }
+                      var root = (window.Shopify && window.Shopify.routes && window.Shopify.routes.root) || '/';
+                      window.location.href = root + 'checkout';
+                    })
+                    .catch(function () {
+                      buyNow.disabled = false;
+                    });
+                });
+              }
+            </script>
             <div class="m-product-form-message"></div>
           {%- endform -%}
         </product-form>
@@ -524,17 +576,36 @@
           </div>
         {% endif %}
       {%- when 'trust_badge' -%}
-        {% if block.settings.trust_badges_image != blank %}
-          {% assign position = block.settings.position %}
-          <div class="m-product-trust-badge m:text-center m-product-trust-badge--{{ position | default: 'below' }}">
-            <div style="width: {{ block.settings.trust_badges_image_width }};">
-              {% render 'responsive-image', image: block.settings.trust_badges_image %}
-            </div>
-            {% if block.settings.trust_badges_text != blank %}
-              <div class="m-product-trust-badge__content m:text-base rte">{{ block.settings.trust_badges_text }}</div>
-            {% endif %}
+        <div class="toyora-pdp-trust">
+          <div class="toyora-pdp-trust__item">
+            <span class="toyora-pdp-trust__icon">
+              <svg viewBox="0 0 24 24" fill="none"><path d="M3 7h11v9H3V7z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/><path d="M14 10h4l3 3v3h-7v-6z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/><circle cx="7" cy="18.5" r="1.6" fill="currentColor"/><circle cx="17.5" cy="18.5" r="1.6" fill="currentColor"/></svg>
+            </span>
+            <strong class="toyora-pdp-trust__title">Free Delivery</strong>
+            <span class="toyora-pdp-trust__sub">On orders over ৳999</span>
           </div>
-        {% endif %}
+          <div class="toyora-pdp-trust__item">
+            <span class="toyora-pdp-trust__icon">
+              <svg viewBox="0 0 24 24" fill="none"><path d="M4 12a8 8 0 0 1 13.7-5.7L20 8" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/><path d="M20 4v4h-4" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/><path d="M20 12a8 8 0 0 1-13.7 5.7L4 16" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/><path d="M4 20v-4h4" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>
+            </span>
+            <strong class="toyora-pdp-trust__title">Easy Return</strong>
+            <span class="toyora-pdp-trust__sub">7 days return policy</span>
+          </div>
+          <div class="toyora-pdp-trust__item">
+            <span class="toyora-pdp-trust__icon">
+              <svg viewBox="0 0 24 24" fill="none"><path d="M12 3 5 6v5.5c0 4.2 2.8 7.3 7 9.2 4.2-1.9 7-5 7-9.2V6l-7-3z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/><path d="M9 12.2 11 14l4-4.2" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </span>
+            <strong class="toyora-pdp-trust__title">Safe For Kids</strong>
+            <span class="toyora-pdp-trust__sub">Non-toxic material</span>
+          </div>
+          <div class="toyora-pdp-trust__item">
+            <span class="toyora-pdp-trust__icon">
+              <svg viewBox="0 0 24 24" fill="none"><rect x="3.5" y="6" width="17" height="12" rx="2" stroke="currentColor" stroke-width="1.7"/><path d="M3.5 10h17" stroke="currentColor" stroke-width="1.7"/><path d="M8 15h4" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>
+            </span>
+            <strong class="toyora-pdp-trust__title">Cash On Delivery</strong>
+            <span class="toyora-pdp-trust__sub">Pay when you receive</span>
+          </div>
+        </div>
       {%- when 'addons' -%}
         {% liquid
           assign show_size_button = true
@@ -640,8 +711,68 @@
             {% endif %}
           {% endif %}
         </div>
+      {%- when 'toyora_features' -%}
+        {% liquid
+          assign feature_items = ''
+          if block.settings.feature_1 != blank
+            assign feature_items = feature_items | append: block.settings.feature_1 | append: '||'
+          endif
+          if block.settings.feature_2 != blank
+            assign feature_items = feature_items | append: block.settings.feature_2 | append: '||'
+          endif
+          if block.settings.feature_3 != blank
+            assign feature_items = feature_items | append: block.settings.feature_3 | append: '||'
+          endif
+          if block.settings.feature_4 != blank
+            assign feature_items = feature_items | append: block.settings.feature_4 | append: '||'
+          endif
+          if block.settings.feature_5 != blank
+            assign feature_items = feature_items | append: block.settings.feature_5 | append: '||'
+          endif
+          if block.settings.feature_6 != blank
+            assign feature_items = feature_items | append: block.settings.feature_6 | append: '||'
+          endif
+          if block.settings.feature_7 != blank
+            assign feature_items = feature_items | append: block.settings.feature_7 | append: '||'
+          endif
+          if block.settings.feature_8 != blank
+            assign feature_items = feature_items | append: block.settings.feature_8 | append: '||'
+          endif
+          assign feature_list = feature_items | split: '||'
+          assign feature_colors = 'purple,green,purple,pink,blue,orange,red,green' | split: ','
+        %}
+        {% if feature_items != blank %}
+          <div class="toyora-pdp-features">
+            {% for feature in feature_list %}
+              {% if feature != blank %}
+                <div class="toyora-pdp-features__item">
+                  <span class="toyora-pdp-features__icon toyora-pdp-features__icon--{{ feature_colors[forloop.index0] }}">
+                    {% case forloop.index0 %}
+                      {% when 0 %}
+                        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M4 11h4V7H4v4zm6 0h4V7h-4v4zm6 0h4V7h-4v4zM4 17h4v-4H4v4zm6 0h4v-4h-4v4zm6 0h4v-4h-4v4z"/></svg>
+                      {% when 1 %}
+                        <svg viewBox="0 0 24 24" fill="none"><rect x="7" y="6" width="10" height="14" rx="2" stroke="currentColor" stroke-width="1.8"/><path d="M10 9h4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+                      {% when 2 %}
+                        <svg viewBox="0 0 24 24" fill="none"><path d="M12 5a7 7 0 1 1-6.3 4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><path d="M5 4.5v4h4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+                      {% when 3 %}
+                        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M9 16a3 3 0 0 0 6 0V8a3 3 0 0 0-6 0v8z"/></svg>
+                      {% when 4 %}
+                        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M9 21h6v-2H9v2zm3-19C8.1 2 5 5.1 5 9c0 2.4 1.2 4.5 3 5.7V17h8v-2.3c1.8-1.2 3-3.3 3-5.7 0-3.9-3.1-7-7-7z"/></svg>
+                      {% when 5 %}
+                        <svg viewBox="0 0 24 24" fill="none"><path d="M12 3 4 7v5c0 5 3.4 8.6 8 10 4.6-1.4 8-5 8-10V7l-8-4z" stroke="currentColor" stroke-width="1.8"/></svg>
+                      {% else %}
+                        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M13 2 4 14h7l-1 8 10-14h-7l0-6z"/></svg>
+                    {% endcase %}
+                  </span>
+                  <span class="toyora-pdp-features__label">{{ feature }}</span>
+                </div>
+              {% endif %}
+            {% endfor %}
+          </div>
+        {% endif %}
       {%- when 'shipping' -%}
-        <ul class="m-product-shipping">
+        {% comment %} Estimated delivery widget removed per PDP mockup {% endcomment %}
+        <ul class="m-product-shipping m:hidden">
           {% if block.settings.show_delivery_times %}
             <li class="m-product-shipping--item m:display-flex m:items-center">
               <span class="m-product-shipping--icon">

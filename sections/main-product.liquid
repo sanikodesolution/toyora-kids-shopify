@@ -1,4 +1,6 @@
 {{ 'product.css' | asset_url | stylesheet_tag }}
+{{ 'toyora-theme.css' | asset_url | stylesheet_tag }}
+{{ 'toyora-pdp.css' | asset_url | stylesheet_tag }}
 {% if section.settings.show_zoom_button %}
   {{ 'photoswipe.css' | asset_url | stylesheet_tag }}
   {{ 'component-photoswipe.css' | asset_url | stylesheet_tag }}
@@ -1026,6 +1028,60 @@
           "id": "enable_wishlist",
           "label": "Enable wishlist button",
           "default": false
+        }
+      ]
+    },
+    {
+      "type": "toyora_features",
+      "name": "Product features",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "text",
+          "id": "feature_1",
+          "label": "Feature 1",
+          "default": "4 Wheel Drive"
+        },
+        {
+          "type": "text",
+          "id": "feature_2",
+          "label": "Feature 2",
+          "default": "Rechargeable Battery"
+        },
+        {
+          "type": "text",
+          "id": "feature_3",
+          "label": "Feature 3",
+          "default": "360° Rotation"
+        },
+        {
+          "type": "text",
+          "id": "feature_4",
+          "label": "Feature 4",
+          "default": "Light & Music"
+        },
+        {
+          "type": "text",
+          "id": "feature_5",
+          "label": "Feature 5",
+          "default": "LED Lights"
+        },
+        {
+          "type": "text",
+          "id": "feature_6",
+          "label": "Feature 6",
+          "default": "Durable & Shockproof"
+        },
+        {
+          "type": "text",
+          "id": "feature_7",
+          "label": "Feature 7",
+          "default": "High Speed"
+        },
+        {
+          "type": "text",
+          "id": "feature_8",
+          "label": "Feature 8"
         }
       ]
     },
