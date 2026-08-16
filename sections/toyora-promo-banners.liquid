@@ -1,84 +1,187 @@
 {{ 'toyora-theme.css' | asset_url | stylesheet_tag }}
 
-<section class="toyora-section toyora-promos">
-  <div class="toyora-container toyora-promos__grid" style="--cols:{{ section.blocks.size }};">
-    {% for block in section.blocks %}
-      <a href="{{ block.settings.link }}" class="toyora-promo" style="background:{{ block.settings.bg_color }};">
-        <div class="toyora-promo__text">
-          <span class="toyora-promo__title">{{ block.settings.title }}</span>
-          <span class="toyora-promo__subtitle">{{ block.settings.subtitle }}</span>
-          <span class="toyora-btn toyora-promo__btn" style="color:{{ block.settings.bg_color }};">{{ block.settings.btn_text }}</span>
-        </div>
-        {% if block.settings.image != blank %}
-          <img class="toyora-promo__img" src="{{ block.settings.image | image_url: width: 300 }}" alt="{{ block.settings.title }}" loading="lazy">
+<section class="toyora-section toyora-flash" id="toyora-flash-{{ section.id }}">
+  <div class="toyora-container toyora-flash__inner">
+
+    <div class="toyora-flash__left">
+      <span class="toyora-flash__badge">⚡ {{ section.settings.heading }}</span>
+      <p class="toyora-flash__sub">{{ section.settings.subheading }}</p>
+      <div class="toyora-flash__timer" data-end="{{ section.settings.end_date }}">
+        <div class="toyora-flash__unit"><span data-unit="days">00</span><small>Days</small></div>
+        <div class="toyora-flash__unit"><span data-unit="hours">00</span><small>Hrs</small></div>
+        <div class="toyora-flash__unit"><span data-unit="minutes">00</span><small>Mins</small></div>
+        <div class="toyora-flash__unit"><span data-unit="seconds">00</span><small>Secs</small></div>
+      </div>
+    </div>
+
+    <div class="toyora-flash__products">
+      {% for block in section.blocks %}
+        {% assign product = block.settings.product %}
+        {% if product != blank %}
+          <a href="{{ product.url }}" class="toyora-flash__card">
+            <span class="toyora-flash__imgwrap">
+              <img src="{{ product.featured_image | image_url: width: 300 }}" alt="{{ product.title }}" loading="lazy">
+            </span>
+            <span class="toyora-flash__price">
+              {{ product.price | money_without_trailing_zeros }}
+              {% if product.compare_at_price > product.price %}
+                <s>{{ product.compare_at_price | money_without_trailing_zeros }}</s>
+              {% endif %}
+            </span>
+          </a>
         {% endif %}
-      </a>
-    {% endfor %}
+      {% endfor %}
+    </div>
+
+    {% if section.settings.view_all_link != blank %}
+      <a href="{{ section.settings.view_all_link }}" class="toyora-btn toyora-flash__viewall">{{ section.settings.view_all_text }}</a>
+    {% endif %}
   </div>
 </section>
 
 <style>
-  .toyora-promos{ padding:24px 0; }
-  .toyora-promos__grid{
-    display:grid;
-    grid-template-columns:repeat(var(--cols,3),1fr);
-    gap:20px;
-  }
-  .toyora-promo{
-    position:relative;
+  .toyora-flash{ padding:8px 0; }
+  .toyora-flash__inner{
+    background:linear-gradient(90deg, var(--toyora-red), #FF6B9D);
     border-radius:var(--toyora-radius-lg);
-    min-height:220px;
     padding:28px;
     display:flex;
-    align-items:flex-end;
-    text-decoration:none;
+    align-items:center;
+    gap:28px;
+    flex-wrap:wrap;
+    color:#fff;
+    box-sizing:border-box;
     overflow:hidden;
   }
-  .toyora-promo__text{ display:flex; flex-direction:column; gap:6px; position:relative; z-index:2; }
-  .toyora-promo__title{ font-family:var(--toyora-font-display); font-weight:700; font-size:22px; color:#fff; }
-  .toyora-promo__subtitle{ font-size:13px; color:rgba(255,255,255,.9); margin-bottom:8px; }
-  .toyora-promo__btn{ background:#fff; padding:8px 18px; font-size:13px; align-self:flex-start; }
-  .toyora-promo__img{
-    position:absolute;
-    right:-10px; bottom:-10px;
-    width:55%;
-    max-width:220px;
-    object-fit:contain;
-    z-index:1;
-    opacity:.95;
+  .toyora-flash__left{ min-width:220px; flex-shrink:0; }
+  .toyora-flash__badge{ font-family:var(--toyora-font-display); font-weight:700; font-size:20px; }
+  .toyora-flash__sub{ font-size:13px; opacity:.9; margin:4px 0 12px; }
+  .toyora-flash__timer{ display:flex; gap:8px; }
+  .toyora-flash__unit{ background:rgba(255,255,255,.2); border-radius:10px; padding:8px 10px; text-align:center; min-width:48px; }
+  .toyora-flash__unit span{ display:block; font-family:var(--toyora-font-display); font-size:18px; font-weight:700; }
+  .toyora-flash__unit small{ font-size:10px; opacity:.85; }
+
+  /* ---- Product cards: fixed-width, horizontally scrollable, never crop ---- */
+  .toyora-flash__products{
+    display:flex;
+    gap:12px;
+    flex:0 1 auto;              /* size to content, only shrink when it must — never stretch to fill empty space */
+    min-width:0;                /* allows flex item to shrink instead of pushing overflow */
+    max-width:100%;
+    overflow-x:auto;
+    overflow-y:hidden;
+    -webkit-overflow-scrolling:touch;
+    scroll-snap-type:x proximity;
+    padding:4px 2px 8px;
+    margin: 0 auto;
+  }
+  .toyora-flash__products::-webkit-scrollbar{ height:6px; }
+  .toyora-flash__products::-webkit-scrollbar-thumb{ background:rgba(255,255,255,.5); border-radius:10px; }
+
+  .toyora-flash__card{
+    display:block;
+    background:#fff;
+    border-radius:14px;
+    padding:10px;
+    width:120px;
+    flex:0 0 120px;
+    box-sizing:border-box;
+    text-align:center;
+    text-decoration:none;
+    color:var(--toyora-dark);
+    scroll-snap-align:start;
+  }
+  .toyora-flash__imgwrap{
+    display:block;
+    width:100%;
+    aspect-ratio:1/1;
+    border-radius:10px;
+    overflow:hidden;
+    margin-bottom:6px;
+    background:#f4f4f4;
+  }
+  .toyora-flash__card img{
+    display:block;
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    object-position:center;
+  }
+  .toyora-flash__price{ font-size:13px; font-weight:700; color:var(--toyora-red); display:block; }
+  .toyora-flash__price s{ color:#aaa; font-weight:400; margin-left:4px; }
+
+  .toyora-flash__viewall{ background:#fff; color:var(--toyora-red); white-space:nowrap; flex-shrink:0; margin-left:auto; }
+
+  /* ---- Tablet ---- */
+  @media screen and (max-width:989px){
+    .toyora-flash__card{ width:110px; flex:0 0 110px; }
   }
 
+  /* ---- Mobile ---- */
   @media screen and (max-width:749px){
-    .toyora-promos__grid{ grid-template-columns:1fr; }
+    .toyora-flash__inner{ flex-direction:column; align-items:flex-start; padding:18px; gap:16px; }
+    .toyora-flash__left{ min-width:0; width:100%; }
+    .toyora-flash__products{ width:100%; }
+    .toyora-flash__viewall{ width:100%; text-align:center; }
+    .toyora-flash__card{ width:104px; flex:0 0 104px; padding:8px; }
+  }
+
+  /* ---- Small mobile ---- */
+  @media screen and (max-width:480px){
+    .toyora-flash__badge{ font-size:16px; }
+    .toyora-flash__sub{ font-size:12px; margin-bottom:10px; }
+    .toyora-flash__timer{ gap:6px; }
+    .toyora-flash__unit{ min-width:42px; padding:6px 8px; }
+    .toyora-flash__unit span{ font-size:14px; }
+    .toyora-flash__unit small{ font-size:9px; }
+    .toyora-flash__card{ width:92px; flex:0 0 92px; padding:7px; border-radius:12px; }
+    .toyora-flash__price{ font-size:11px; }
   }
 </style>
 
+<script>
+(function(){
+  var wrap = document.querySelector('#toyora-flash-{{ section.id }} .toyora-flash__timer');
+  if(!wrap) return;
+  var end = new Date(wrap.dataset.end).getTime();
+  function tick(){
+    var now = new Date().getTime();
+    var diff = Math.max(0, end - now);
+    var d = Math.floor(diff / (1000*60*60*24));
+    var h = Math.floor((diff % (1000*60*60*24)) / (1000*60*60));
+    var m = Math.floor((diff % (1000*60*60)) / (1000*60));
+    var s = Math.floor((diff % (1000*60)) / 1000);
+    wrap.querySelector('[data-unit="days"]').textContent = String(d).padStart(2,'0');
+    wrap.querySelector('[data-unit="hours"]').textContent = String(h).padStart(2,'0');
+    wrap.querySelector('[data-unit="minutes"]').textContent = String(m).padStart(2,'0');
+    wrap.querySelector('[data-unit="seconds"]').textContent = String(s).padStart(2,'0');
+  }
+  tick();
+  setInterval(tick, 1000);
+})();
+</script>
+
 {% schema %}
 {
-  "name": "Toyora Promo Banners",
+  "name": "Toyora Flash Sale",
+  "settings": [
+    { "type": "text", "id": "heading", "label": "Heading", "default": "FLASH SALE" },
+    { "type": "text", "id": "subheading", "label": "Subheading", "default": "Hurry up! Limited time offer" },
+    { "type": "text", "id": "end_date", "label": "End date/time (e.g. 2026-08-20T23:59:59)", "default": "2026-08-20T23:59:59" },
+    { "type": "text", "id": "view_all_text", "label": "View all button text", "default": "VIEW ALL DEALS" },
+    { "type": "url", "id": "view_all_link", "label": "View all link" }
+  ],
   "blocks": [
     {
-      "type": "banner",
-      "name": "Banner",
+      "type": "product",
+      "name": "Product",
       "settings": [
-        { "type": "text", "id": "title", "label": "Title", "default": "SPACE TOYS" },
-        { "type": "text", "id": "subtitle", "label": "Subtitle", "default": "Explore The Universe" },
-        { "type": "text", "id": "btn_text", "label": "Button text", "default": "SHOP NOW" },
-        { "type": "color", "id": "bg_color", "label": "Background color", "default": "#9B6BFF" },
-        { "type": "image_picker", "id": "image", "label": "Corner image" },
-        { "type": "url", "id": "link", "label": "Link" }
+        { "type": "product", "id": "product", "label": "Product" }
       ]
     }
   ],
   "presets": [
-    {
-      "name": "Toyora Promo Banners",
-      "blocks": [
-        { "type": "banner", "settings": { "title": "SPACE TOYS", "subtitle": "Explore The Universe", "btn_text": "SHOP NOW", "bg_color": "#9B6BFF" } },
-        { "type": "banner", "settings": { "title": "EDUCATIONAL TOYS", "subtitle": "Learn Through Play", "btn_text": "EXPLORE", "bg_color": "#FF3B6E" } },
-        { "type": "banner", "settings": { "title": "OUTDOOR FUN", "subtitle": "Active Play, Happy Day", "btn_text": "SHOP NOW", "bg_color": "#FFC93D" } }
-      ]
-    }
+    { "name": "Toyora Flash Sale", "blocks": [ { "type": "product" }, { "type": "product" }, { "type": "product" }, { "type": "product" }, { "type": "product" } ] }
   ]
 }
 {% endschema %}

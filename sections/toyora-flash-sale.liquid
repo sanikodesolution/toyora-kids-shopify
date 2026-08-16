@@ -22,6 +22,7 @@
             <span class="toyora-flash__imgwrap">
               <img src="{{ product.featured_image | image_url: width: 300 }}" alt="{{ product.title }}" loading="lazy">
             </span>
+            <span class="toyora-flash__title">{{ product.title }}</span>
             <span class="toyora-flash__price">
               {{ product.price | money_without_trailing_zeros }}
               {% if product.compare_at_price > product.price %}
@@ -44,29 +45,45 @@
   .toyora-flash__inner{
     background:linear-gradient(90deg, var(--toyora-red), #FF6B9D);
     border-radius:var(--toyora-radius-lg);
-    padding:28px;
+    padding:24px 28px;
     display:flex;
     align-items:center;
-    gap:28px;
-    flex-wrap:wrap;
+    justify-content:center;
+    gap:24px;
+    flex-wrap:nowrap;
     color:#fff;
     box-sizing:border-box;
     overflow:hidden;
   }
-  .toyora-flash__left{ min-width:220px; flex-shrink:0; }
+  .toyora-flash__left{
+    min-width:200px;
+    flex-shrink:0;
+    display:flex;
+    flex-direction:column;
+    align-items:flex-start;
+    justify-content:center;
+  }
   .toyora-flash__badge{ font-family:var(--toyora-font-display); font-weight:700; font-size:20px; }
   .toyora-flash__sub{ font-size:13px; opacity:.9; margin:4px 0 12px; }
-  .toyora-flash__timer{ display:flex; gap:8px; }
-  .toyora-flash__unit{ background:rgba(255,255,255,.2); border-radius:10px; padding:8px 10px; text-align:center; min-width:48px; }
+  .toyora-flash__timer{ display:flex; gap:8px; justify-content:flex-start; }
+  .toyora-flash__unit{
+    background:#fff;
+    color:var(--toyora-dark);
+    border-radius:10px;
+    padding:8px 10px;
+    text-align:center;
+    min-width:48px;
+  }
   .toyora-flash__unit span{ display:block; font-family:var(--toyora-font-display); font-size:18px; font-weight:700; }
-  .toyora-flash__unit small{ font-size:10px; opacity:.85; }
+  .toyora-flash__unit small{ font-size:10px; opacity:.85; color:var(--toyora-red); text-transform:uppercase; }
 
-  /* ---- Product cards: fixed-width, horizontally scrollable, never crop ---- */
   .toyora-flash__products{
     display:flex;
+    align-items:center;
+    justify-content:center;
     gap:12px;
-    flex:0 1 auto;              /* size to content, only shrink when it must — never stretch to fill empty space */
-    min-width:0;                /* allows flex item to shrink instead of pushing overflow */
+    flex:0 1 auto;
+    min-width:0;
     max-width:100%;
     overflow-x:auto;
     overflow-y:hidden;
@@ -78,7 +95,10 @@
   .toyora-flash__products::-webkit-scrollbar-thumb{ background:rgba(255,255,255,.5); border-radius:10px; }
 
   .toyora-flash__card{
-    display:block;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
     background:#fff;
     border-radius:14px;
     padding:10px;
@@ -97,31 +117,69 @@
     border-radius:10px;
     overflow:hidden;
     margin-bottom:6px;
-    background:#f4f4f4;
+    background:#fff;
+    position:relative;
   }
   .toyora-flash__card img{
+    position:absolute;
+    inset:0;
     display:block;
     width:100%;
     height:100%;
-    object-fit:cover;
+    max-width:none;
+    max-height:none;
+    object-fit:contain;
     object-position:center;
+    padding:4px;
+    box-sizing:border-box;
   }
-  .toyora-flash__price{ font-size:13px; font-weight:700; color:var(--toyora-red); display:block; }
+  .toyora-flash__title{
+    display:block;
+    font-size:12px;
+    font-weight:600;
+    line-height:1.25;
+    margin-bottom:4px;
+    width:100%;
+    overflow:hidden;
+    text-overflow:ellipsis;
+    white-space:nowrap;
+  }
+  .toyora-flash__price{ font-size:13px; font-weight:700; color:var(--toyora-red); display:block; width:100%; text-align:center; }
   .toyora-flash__price s{ color:#aaa; font-weight:400; margin-left:4px; }
 
-  .toyora-flash__viewall{ background:#fff; color:var(--toyora-red); white-space:nowrap; flex-shrink:0; margin-left:auto; }
+  .toyora-flash__viewall{
+    background:transparent;
+    color:#fff;
+    border:2px solid #fff;
+    white-space:nowrap;
+    flex-shrink:0;
+    padding:5px 10px;
+    font-size:13px;
+    margin:0;
+  }
 
-  /* ---- Tablet ---- */
-  @media screen and (max-width:989px){
+  @media screen and (max-width:1199px){
+    .toyora-flash__inner{ gap:18px; padding:20px; }
     .toyora-flash__card{ width:110px; flex:0 0 110px; }
   }
 
-  /* ---- Mobile ---- */
   @media screen and (max-width:749px){
-    .toyora-flash__inner{ flex-direction:column; align-items:flex-start; padding:18px; gap:16px; }
-    .toyora-flash__left{ min-width:0; width:100%; }
-    .toyora-flash__products{ width:100%; }
-    .toyora-flash__viewall{ width:100%; text-align:center; }
+    .toyora-flash__inner{
+      flex-direction:column;
+      align-items:center;
+      justify-content:center;
+      text-align:center;
+      padding:18px;
+      gap:16px;
+    }
+    .toyora-flash__left{
+      min-width:0;
+      width:100%;
+      align-items:center;
+    }
+    .toyora-flash__timer{ justify-content:center; }
+    .toyora-flash__products{ width:100%; justify-content:flex-start; }
+    .toyora-flash__viewall{ margin:0 auto; }
     .toyora-flash__card{ width:104px; flex:0 0 104px; padding:8px; }
   }
 
