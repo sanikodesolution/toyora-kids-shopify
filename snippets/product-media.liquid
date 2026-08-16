@@ -221,6 +221,9 @@
                         media_layout: media_layout,
                         product: product
                       %}
+                      {% if forloop.index == 5 and product.media.size > 5 %}
+                        <span class="toyora-pdp-thumb-more">+{{ product.media.size | minus: 4 }}</span>
+                      {% endif %}
                       {% if media.media_type contains 'video' %}
                         <div class="m-product-media--slider__thumbnail-icon">
                           <svg

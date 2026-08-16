@@ -82,7 +82,7 @@
         <div class="m-product-media--mobile m-product-media--{{ section.settings.layout }} md:m:hidden">
           {%- render 'product-media-mobile',
             show_nav: false,
-            show_thumbnails: section.settings.show_nav_media_mobile,
+            show_thumbnails: true,
             show_pagination: section.settings.show_pagination_mobile,
             section: section
           -%}
@@ -253,6 +253,57 @@
       "id": "show_atwl",
       "label": "Show Add to wishlist",
       "default": true
+    },
+    {
+      "type": "header",
+      "content": "Product feature list"
+    },
+    {
+      "type": "text",
+      "id": "pdp_feature_1",
+      "label": "Feature 1",
+      "default": "4 Wheel Drive"
+    },
+    {
+      "type": "text",
+      "id": "pdp_feature_2",
+      "label": "Feature 2",
+      "default": "Rechargeable Battery"
+    },
+    {
+      "type": "text",
+      "id": "pdp_feature_3",
+      "label": "Feature 3",
+      "default": "360° Rotation"
+    },
+    {
+      "type": "text",
+      "id": "pdp_feature_4",
+      "label": "Feature 4",
+      "default": "Light & Music"
+    },
+    {
+      "type": "text",
+      "id": "pdp_feature_5",
+      "label": "Feature 5",
+      "default": "LED Lights"
+    },
+    {
+      "type": "text",
+      "id": "pdp_feature_6",
+      "label": "Feature 6",
+      "default": "Durable & Shockproof"
+    },
+    {
+      "type": "text",
+      "id": "pdp_feature_7",
+      "label": "Feature 7",
+      "default": "High Speed"
+    },
+    {
+      "type": "text",
+      "id": "pdp_feature_8",
+      "label": "Feature 8"
     },
     {
       "type": "checkbox",

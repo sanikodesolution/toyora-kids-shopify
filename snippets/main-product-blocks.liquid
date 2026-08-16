@@ -86,14 +86,46 @@
         {% if settings.review_app == 'ali_reviews' %}
           <div product-id="{{ product.id }}" class="alr-display-review-badge"></div>
         {% endif %}
+        {% liquid
+          assign rating_value = 0
+          assign rating_count = 0
+          if product.metafields.reviews.rating.value != blank
+            assign rating_value = product.metafields.reviews.rating.value.rating | times: 1.0
+            assign rating_count = product.metafields.reviews.rating_count | default: 0
+          endif
+          assign full_stars = rating_value | floor
+          if rating_value == 0
+            assign full_stars = 5
+          endif
+        %}
+        <div class="toyora-pdp-rating">
+          {%- capture app_badge -%}
+            {%- render 'product-reviews-app__badge', product: product -%}
+          {%- endcapture -%}
+          {%- if app_badge != blank -%}
+            <div class="toyora-pdp-rating__app">{{ app_badge }}</div>
+          {%- endif -%}
+          <div class="toyora-pdp-rating__fallback"{% if app_badge != blank %} hidden{% endif %}>
+            <span class="toyora-pdp-rating__stars" aria-hidden="true">
+              {%- for i in (1..5) -%}
+                <svg viewBox="0 0 20 20"><path fill="{% if i <= full_stars %}#F5B301{% else %}#E5E7EB{% endif %}" d="M10 1.5l2.47 5.01 5.53.8-4 3.9.94 5.5L10 14.1l-4.94 2.61.94-5.5-4-3.9 5.53-.8L10 1.5z"/></svg>
+              {%- endfor -%}
+            </span>
+            {%- if rating_count > 0 -%}
+              <span class="toyora-pdp-rating__text">{{ rating_value | round: 1 }} ({{ rating_count }} Reviews)</span>
+            {%- else -%}
+              <span class="toyora-pdp-rating__text">No reviews yet</span>
+            {%- endif -%}
+          </div>
+        </div>
       {%- when 'price' -%}
         <div class="product-block-group--price">
           {% render 'product-prices',
             use_variant: true,
             product: product,
-            show_sale_badge: block.settings.show_saving,
+            show_sale_badge: true,
             price_text_size: 'm:text-xl md:m:text-2xl',
-            sale_badge_type: block.settings.sale_badge_type
+            sale_badge_type: block.settings.sale_badge_type | default: 'percentage'
           %}
         </div>
         {%- if shop.taxes_included -%}
@@ -107,6 +139,26 @@
             {{ form | payment_terms }}
           {%- endform -%}
         </div>
+        <ul class="m-product-meta toyora-pdp-meta">
+          <li>
+            <div
+              class="m-product-meta--value m-product-availability{% unless selected_variant.available %} m-product-availability--outofstock{% endunless %}"
+              data-availability
+            >
+              {%- if selected_variant.available -%}
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><circle cx="8" cy="8" r="8" fill="#22a45a"/><path d="M4.8 8.2 7 10.3 11.3 5.8" stroke="#fff" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                {{- 'products.product.in_stock' | t -}}
+              {%- else -%}
+                {% render 'new-locale', key: 'products.product.out_of_stock' %}
+              {%- endif -%}
+            </div>
+          </li>
+          <li>
+            <span class="m-product-meta--label">{{ 'products.product.sku' | t }}:</span>
+            <div class="m-product-meta--value" data-variant-sku>{{ selected_variant.sku | default: 'N/A' }}</div>
+          </li>
+        </ul>
+        {% render 'toyora-pdp-features', section: section, product: product %}
       {%- when 'short_description' -%}
         {% if product.metafields.descriptor.short_description != blank %}
           <div class="m-product-description">{{ product.metafields.descriptor.short_description }}</div>
@@ -346,6 +398,7 @@
               {%- render 'gift-card-recipient-form', product: product, form: form, section: section -%}
             {%- endif -%}
 
+            {% render 'toyora-pdp-trust' %}
             <div class="toyora-pdp-actions">
               <div class="toyora-pdp-actions__row">
                 {% if block.settings.show_quantity_selector %}
