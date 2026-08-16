@@ -461,3 +461,116 @@
   display: block !important;
   margin-top: 10px;
 }
+
+/* Product details tabs */
+.toyora-pdtabs {
+  --toyora-tab-active: #e91e63;
+  --toyora-tab-text: #2a1b4d;
+  background: #fff;
+  border: 1px solid #ece8f0;
+  border-radius: 18px;
+  overflow: hidden;
+}
+.toyora-pdtabs .toyora-pdtabs__header,
+.toyora-pdtabs .m-tabs__header {
+  border-bottom: 1px solid #ece8f0;
+  justify-content: stretch;
+}
+.toyora-pdtabs__nav,
+.toyora-pdtabs .m-tabs__header-inner {
+  width: 100%;
+  display: flex;
+  column-gap: 0 !important;
+  justify-content: space-between;
+}
+.toyora-pdtabs__tab.m-tab-header {
+  flex: 1 1 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin: 0;
+  padding: 16px 8px 14px;
+  opacity: 1;
+  color: var(--toyora-tab-text);
+  font-size: 15px;
+  font-weight: 700;
+}
+.toyora-pdtabs__tab.m-tab-header:after {
+  left: 16%;
+  right: 16%;
+  width: auto;
+  height: 3px;
+  background: transparent;
+  bottom: 0;
+}
+.toyora-pdtabs__tab.m-tab-header.active,
+.toyora-pdtabs__tab.m-tab-header:hover {
+  color: var(--toyora-tab-active);
+  opacity: 1;
+}
+.toyora-pdtabs__tab.m-tab-header.active:after {
+  width: auto;
+  background: var(--toyora-tab-active);
+}
+.toyora-pdtabs__icon {
+  display: inline-flex;
+  width: 18px;
+  height: 18px;
+}
+.toyora-pdtabs__icon svg {
+  width: 18px;
+  height: 18px;
+}
+.toyora-pdtabs__content.m-tabs__content {
+  padding: 22px 28px 24px;
+}
+.toyora-pdtabs__desc {
+  max-height: 4.8em;
+  overflow: hidden;
+  color: var(--toyora-tab-text);
+}
+.toyora-pdtabs__desc.is-expanded {
+  max-height: none;
+}
+.toyora-pdtabs__desc-inner,
+.toyora-pdtabs__desc-inner p {
+  color: var(--toyora-tab-text);
+  font-size: 15px;
+  line-height: 1.65;
+  margin: 0;
+}
+.toyora-pdtabs__more {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  width: 100%;
+  margin-top: 18px;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--toyora-tab-active);
+  font-size: 15px;
+  font-weight: 800;
+  cursor: pointer;
+}
+.toyora-pdtabs__more svg {
+  width: 14px;
+  height: 14px;
+  transition: transform 0.2s ease;
+}
+.toyora-pdtabs__more.is-open svg {
+  transform: rotate(180deg);
+}
+@media screen and (max-width: 749px) {
+  .toyora-pdtabs__tab.m-tab-header {
+    flex-direction: column;
+    gap: 4px;
+    font-size: 12px;
+    padding: 12px 4px 10px;
+  }
+  .toyora-pdtabs__content.m-tabs__content {
+    padding: 16px 16px 18px;
+  }
+}

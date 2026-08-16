@@ -19,6 +19,7 @@
   endif
 %}
 {{ 'tabs.css' | asset_url | stylesheet_tag }}
+{{ 'toyora-pdp.css' | asset_url | stylesheet_tag }}
 <script src="{{ 'product-details-tabs.js' | asset_url }}" defer="defer"></script>
 {%- style -%}
   #m-section-{{ section.id }} {
@@ -28,27 +29,57 @@
 {%- endstyle -%}
 <m-product-details-tabs
   id="m-section-{{ section.id }}"
-  class="{{ classes }}"
+  class="{{ classes }} toyora-pdtabs-section"
   data-section-type="product-details-tabs"
   data-section-id="{{ section.id }}"
 >
+  {%- assign review_count = product.metafields.reviews.rating_count | default: 0 -%}
   <div class="{{ container }} m-section-py">
-    <div class="m-tabs {% if animated %} m-scroll-trigger animate--{{ animation_effect }}{% endif %}">
-      <div class="m-tabs__header m:display-flex m:justify-center">
-        <div class="m-tabs__header-inner">
+    <div class="m-tabs toyora-pdtabs {% if animated %} m-scroll-trigger animate--{{ animation_effect }}{% endif %}">
+      <div class="m-tabs__header toyora-pdtabs__header m:display-flex">
+        <div class="m-tabs__header-inner toyora-pdtabs__nav">
           {% for block in section.blocks %}
+            {%- liquid
+              assign tab_label = block.settings.header
+              if block.type == 'reviews' and review_count > 0
+                assign tab_label = tab_label | append: ' (' | append: review_count | append: ')'
+              endif
+              assign tab_icon = block.type
+              assign heading_down = block.settings.header | downcase
+              if heading_down contains 'faq'
+                assign tab_icon = 'faq'
+              elsif heading_down contains 'ship'
+                assign tab_icon = 'shipping'
+              elsif heading_down contains 'review'
+                assign tab_icon = 'reviews'
+              elsif heading_down contains 'desc'
+                assign tab_icon = 'description'
+              endif
+            -%}
             <div
-              class="m-tab-header"
+              class="m-tab-header toyora-pdtabs__tab"
               data-block-type="{{ block.type }}"
               data-index="{{ forloop.index0 }}"
               {{ block.shopify_attributes }}
             >
-              {{ block.settings.header }}
+              <span class="toyora-pdtabs__icon">
+                {%- case tab_icon -%}
+                  {%- when 'reviews' -%}
+                    <svg viewBox="0 0 24 24" fill="none"><path d="M12 3.5 14.6 9l6 .9-4.3 4.2 1 5.9L12 17.3 6.7 20l1-5.9L3.4 9.9l6-.9L12 3.5z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/></svg>
+                  {%- when 'shipping' -%}
+                    <svg viewBox="0 0 24 24" fill="none"><path d="M3 7h11v9H3V7z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/><path d="M14 10h4l3 3v3h-7v-6z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/><circle cx="7" cy="18.2" r="1.4" fill="currentColor"/><circle cx="17.5" cy="18.2" r="1.4" fill="currentColor"/></svg>
+                  {%- when 'faq' -%}
+                    <svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="8.2" stroke="currentColor" stroke-width="1.7"/><path d="M9.6 9.4a2.4 2.4 0 1 1 3.3 2.2c-.7.4-1.1.8-1.1 1.6v.4" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/><circle cx="12" cy="16.4" r="1" fill="currentColor"/></svg>
+                  {%- else -%}
+                    <svg viewBox="0 0 24 24" fill="none"><path d="M7 4h8l4 4v12a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V5a1 1 0 0 1 1-1z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/><path d="M15 4v5h5" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/><path d="M9 13h6M9 17h4" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>
+                {%- endcase -%}
+              </span>
+              <span class="toyora-pdtabs__label">{{ tab_label }}</span>
             </div>
           {% endfor %}
         </div>
       </div>
-      <div class="m-tabs__content m-product-collapsible">
+      <div class="m-tabs__content m-product-collapsible toyora-pdtabs__content">
         {% for block in section.blocks %}
           <div
             class="m-tab-content--{{ block.type }} m-tab-content"
@@ -57,10 +88,16 @@
             <div class="m-tab-content__inner">
               {% case block.type %}
                 {% when 'description' %}
-                  <div class="rte">
-                    {%- assign description = product.description -%}
-                    {{ description }}
+                  <div class="toyora-pdtabs__desc" data-toyora-desc>
+                    <div class="rte toyora-pdtabs__desc-inner">
+                      {%- assign description = product.description -%}
+                      {{ description }}
+                    </div>
                   </div>
+                  <button type="button" class="toyora-pdtabs__more" data-toyora-readmore>
+                    <span>Read More</span>
+                    <svg viewBox="0 0 16 16" fill="none"><path d="M4 6.5 8 10.5 12 6.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                  </button>
                 {% when 'reviews' %}
                   <div class="{{ block.settings.container | default: 'container' }}">
                     {% render 'product-reviews-app__snippet', custom_liquid: block.settings.custom_liquid %}
@@ -69,6 +106,10 @@
                   <div class="rte">
                     {{ block.settings.content }}
                     {{ block.settings.content_page.content }}
+                  </div>
+                {% when 'faq' %}
+                  <div class="rte">
+                    {{ block.settings.content }}
                   </div>
                 {% when 'liquid' %}
                   {{ block.settings.custom_liquid }}
@@ -202,7 +243,7 @@
           "type": "text",
           "id": "header",
           "label": "Tab header",
-          "default": "Product description"
+          "default": "Description"
         }
       ]
     },
@@ -220,7 +261,7 @@
           "type": "text",
           "id": "header",
           "label": "Tab header",
-          "default": "Product reviews"
+          "default": "Reviews"
         },
         {
           "type": "select",
@@ -262,8 +303,8 @@
           "type": "text",
           "id": "header",
           "label": "Tab heading",
-          "default": "Shipping & Return",
-          "placeholder": "Shipping & Return"
+          "default": "Shipping",
+          "placeholder": "Shipping"
         },
         {
           "type": "richtext",
@@ -275,6 +316,25 @@
           "type": "page",
           "id": "content_page",
           "label": "Tab content from page"
+        }
+      ]
+    },
+    {
+      "type": "faq",
+      "name": "FAQ",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "text",
+          "id": "header",
+          "label": "Tab heading",
+          "default": "FAQ"
+        },
+        {
+          "type": "richtext",
+          "id": "content",
+          "label": "FAQ content",
+          "default": "<p>Have a question? Contact us and we will be happy to help.</p>"
         }
       ]
     },
