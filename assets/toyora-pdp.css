@@ -161,6 +161,41 @@
   border-radius: 16px;
 }
 
+.toyora-pdp-trust--full {
+  width: 100%;
+  margin: 28px 0 8px;
+  padding: 22px 28px;
+  gap: 16px 24px;
+  box-sizing: border-box;
+}
+
+.toyora-pdp-trust--full .toyora-pdp-trust__item {
+  flex-direction: row;
+  justify-content: flex-start;
+  text-align: left;
+  gap: 12px;
+}
+
+.toyora-pdp-trust__copy {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.toyora-pdp-trust--full .toyora-pdp-trust__title {
+  font-size: 13px;
+}
+
+.toyora-pdp-trust--full .toyora-pdp-trust__sub {
+  font-size: 12px;
+}
+
+.toyora-pdp-trust--full .toyora-pdp-trust__icon {
+  width: 44px;
+  height: 44px;
+}
+
 .toyora-pdp-trust__icon--purple { color: #7b6cff; background: #f1eeff; }
 .toyora-pdp-trust__icon--green { color: #22a45a; background: #e9f8ef; }
 .toyora-pdp-trust__icon--red { color: #ff5a4e; background: #ffecea; }
@@ -357,9 +392,11 @@
 }
 
 @media screen and (max-width: 749px) {
-  .toyora-pdp-trust {
+  .toyora-pdp-trust,
+  .toyora-pdp-trust--full {
     grid-template-columns: repeat(2, 1fr);
-    gap: 12px 8px;
+    gap: 14px 12px;
+    padding: 16px;
   }
 
   .toyora-pdp-actions__row {
