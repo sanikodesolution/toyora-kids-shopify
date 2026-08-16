@@ -158,7 +158,46 @@
             <div class="m-product-meta--value" data-variant-sku>{{ selected_variant.sku | default: 'N/A' }}</div>
           </li>
         </ul>
-        {% render 'toyora-pdp-features', section: section, product: product %}
+        {% liquid
+          assign f1 = section.settings.pdp_feature_1 | default: '4 Wheel Drive'
+          assign f2 = section.settings.pdp_feature_2 | default: 'Rechargeable Battery'
+          assign f3 = section.settings.pdp_feature_3 | default: '360° Rotation'
+          assign f4 = section.settings.pdp_feature_4 | default: 'Light & Music'
+          assign f5 = section.settings.pdp_feature_5 | default: 'LED Lights'
+          assign f6 = section.settings.pdp_feature_6 | default: 'Durable & Shockproof'
+          assign f7 = section.settings.pdp_feature_7 | default: 'High Speed'
+          assign f8 = section.settings.pdp_feature_8
+          assign colors = 'blue,green,purple,pink,blue,orange,green,purple' | split: ','
+          assign feature_blob = f1 | append: '||' | append: f2 | append: '||' | append: f3 | append: '||' | append: f4 | append: '||' | append: f5 | append: '||' | append: f6 | append: '||' | append: f7 | append: '||' | append: f8
+          assign feature_list = feature_blob | split: '||'
+        %}
+        <div class="toyora-pdp-features">
+          {%- for feature in feature_list -%}
+            {%- if feature != blank -%}
+              <div class="toyora-pdp-features__item">
+                <span class="toyora-pdp-features__icon toyora-pdp-features__icon--{{ colors[forloop.index0] }}">
+                  {%- case forloop.index0 -%}
+                    {%- when 0 -%}
+                      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M5 11h3V8H5v3zm4 0h3V8H9v3zm4 0h3V8h-3v3zM5 16h3v-3H5v3zm4 0h3v-3H9v3zm4 0h3v-3h-3v3zM3 6h16v12H3V6z"/></svg>
+                    {%- when 1 -%}
+                      <svg viewBox="0 0 24 24" fill="none"><rect x="7" y="6" width="10" height="14" rx="2" stroke="currentColor" stroke-width="1.8"/><path d="M10 9h4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+                    {%- when 2 -%}
+                      <svg viewBox="0 0 24 24" fill="none"><path d="M12 5a7 7 0 1 1-6.3 4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><path d="M5 4.5v4h4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+                    {%- when 3 -%}
+                      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M9 16a3 3 0 0 0 6 0V8a3 3 0 0 0-6 0v8z"/></svg>
+                    {%- when 4 -%}
+                      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M9 21h6v-2H9v2zm3-19C8.1 2 5 5.1 5 9c0 2.4 1.2 4.5 3 5.7V17h8v-2.3c1.8-1.2 3-3.3 3-5.7 0-3.9-3.1-7-7-7z"/></svg>
+                    {%- when 5 -%}
+                      <svg viewBox="0 0 24 24" fill="none"><path d="M12 3 4 7v5c0 5 3.4 8.6 8 10 4.6-1.4 8-5 8-10V7l-8-4z" stroke="currentColor" stroke-width="1.8"/></svg>
+                    {%- else -%}
+                      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M13 2 4 14h7l-1 8 10-14h-7z"/></svg>
+                  {%- endcase -%}
+                </span>
+                <span class="toyora-pdp-features__label">{{ feature }}</span>
+              </div>
+            {%- endif -%}
+          {%- endfor -%}
+        </div>
       {%- when 'short_description' -%}
         {% if product.metafields.descriptor.short_description != blank %}
           <div class="m-product-description">{{ product.metafields.descriptor.short_description }}</div>
@@ -398,7 +437,36 @@
               {%- render 'gift-card-recipient-form', product: product, form: form, section: section -%}
             {%- endif -%}
 
-            {% render 'toyora-pdp-trust' %}
+            <div class="toyora-pdp-trust">
+              <div class="toyora-pdp-trust__item">
+                <span class="toyora-pdp-trust__icon toyora-pdp-trust__icon--purple">
+                  <svg viewBox="0 0 24 24" fill="none"><path d="M3 7h11v9H3V7z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/><path d="M14 10h4l3 3v3h-7v-6z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/><circle cx="7" cy="18.5" r="1.6" fill="currentColor"/><circle cx="17.5" cy="18.5" r="1.6" fill="currentColor"/></svg>
+                </span>
+                <strong class="toyora-pdp-trust__title">Free Delivery</strong>
+                <span class="toyora-pdp-trust__sub">On orders over ৳999</span>
+              </div>
+              <div class="toyora-pdp-trust__item">
+                <span class="toyora-pdp-trust__icon toyora-pdp-trust__icon--purple">
+                  <svg viewBox="0 0 24 24" fill="none"><path d="M4 12a8 8 0 0 1 13.7-5.7L20 8" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/><path d="M20 4v4h-4" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/><path d="M20 12a8 8 0 0 1-13.7 5.7L4 16" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/><path d="M4 20v-4h4" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>
+                </span>
+                <strong class="toyora-pdp-trust__title">Easy Return</strong>
+                <span class="toyora-pdp-trust__sub">7 days return policy</span>
+              </div>
+              <div class="toyora-pdp-trust__item">
+                <span class="toyora-pdp-trust__icon toyora-pdp-trust__icon--green">
+                  <svg viewBox="0 0 24 24" fill="none"><path d="M12 3 5 6v5.5c0 4.2 2.8 7.3 7 9.2 4.2-1.9 7-5 7-9.2V6l-7-3z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/><path d="M9 12.2 11 14l4-4.2" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </span>
+                <strong class="toyora-pdp-trust__title">Safe For Kids</strong>
+                <span class="toyora-pdp-trust__sub">Non-toxic material</span>
+              </div>
+              <div class="toyora-pdp-trust__item">
+                <span class="toyora-pdp-trust__icon toyora-pdp-trust__icon--red">
+                  <svg viewBox="0 0 24 24" fill="none"><rect x="3.5" y="6" width="17" height="12" rx="2" stroke="currentColor" stroke-width="1.7"/><path d="M3.5 10h17" stroke="currentColor" stroke-width="1.7"/><path d="M8 15h4" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>
+                </span>
+                <strong class="toyora-pdp-trust__title">Cash On Delivery</strong>
+                <span class="toyora-pdp-trust__sub">Pay when you receive</span>
+              </div>
+            </div>
             <div class="toyora-pdp-actions">
               <div class="toyora-pdp-actions__row">
                 {% if block.settings.show_quantity_selector %}
