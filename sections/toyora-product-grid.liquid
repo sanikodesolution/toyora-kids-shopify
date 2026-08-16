@@ -24,6 +24,7 @@
     <div class="toyora-prod__grid"
          style="--toyora-cols-desktop:{{ desktop_cols }};--toyora-cols-tablet:{{ tablet_cols }};--toyora-cols-mobile:{{ mobile_cols }};">
       {% for product in collection.products limit: products_to_show %}
+        {% assign rating_count = product.metafields.reviews.rating_count.value | default: product.metafields.reviews.rating_count | default: 0 %}
         <div class="toyora-prod__card">
           <button
             type="button"
@@ -32,7 +33,7 @@
             aria-label="Add {{ product.title | escape }} to wishlist"
             aria-pressed="false"
           >
-            <svg class="toyora-wish-icon" viewBox="0 0 24 24" width="16" height="16" xmlns="http://www.w3.org/2000/svg">
+            <svg class="toyora-wish-icon" viewBox="0 0 24 24" width="18" height="18" xmlns="http://www.w3.org/2000/svg">
               <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
             </svg>
           </button>
@@ -41,17 +42,20 @@
               {% if product.compare_at_price > product.price %}
                 {% assign off = product.compare_at_price | minus: product.price | times: 100 | divided_by: product.compare_at_price %}
                 <span class="toyora-badge toyora-badge--red toyora-prod__badge">{{ off }}% OFF</span>
+              {% elsif product.tags contains 'hot' or product.tags contains 'Hot' or product.tags contains 'HOT' %}
+                <span class="toyora-badge toyora-badge--red toyora-prod__badge">HOT</span>
               {% elsif product.created_at > section.settings.new_since %}
-                <span class="toyora-badge toyora-badge--blue toyora-prod__badge">NEW</span>
+                <span class="toyora-badge toyora-badge--red toyora-prod__badge">NEW</span>
               {% endif %}
               <img src="{{ product.featured_image | image_url: width: 400 }}" alt="{{ product.title }}" loading="lazy">
             </div>
             <div class="toyora-prod__info">
               <span class="toyora-prod__title">{{ product.title }}</span>
-              {% if product.metafields.reviews.rating %}
-                <span class="toyora-prod__rating">★★★★★ ({{ product.metafields.reviews.rating_count }})</span>
-              {% endif %}
-              <span class="toyora-prod__price">
+              <span class="toyora-prod__rating">
+                <span class="toyora-prod__stars" aria-hidden="true">★★★★★</span>
+                <span class="toyora-prod__count">({{ rating_count }})</span>
+              </span>
+              <span class="toyora-prod__price{% if product.compare_at_price > product.price %} toyora-prod__price--sale{% endif %}">
                 {{ product.price | money_without_trailing_zeros }}
                 {% if product.compare_at_price > product.price %}
                   <s>{{ product.compare_at_price | money_without_trailing_zeros }}</s>
@@ -67,7 +71,11 @@
               data-product-id="{{ product.id }}"
               {% unless product.selected_or_first_available_variant.available %}disabled{% endunless %}
             >
-              <span class="toyora-addbtn-icon">🛒</span>
+              <svg class="toyora-addbtn-icon" viewBox="0 0 24 24" width="15" height="15" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                <circle cx="9" cy="20" r="1.4" fill="currentColor"/>
+                <circle cx="18" cy="20" r="1.4" fill="currentColor"/>
+                <path d="M3 4h2l2.2 11.2a1.6 1.6 0 0 0 1.6 1.3h8.7a1.6 1.6 0 0 0 1.6-1.3L21.2 8H6.2" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
               <span class="toyora-addbtn-text">
                 {% if product.selected_or_first_available_variant.available %}ADD TO CART{% else %}SOLD OUT{% endif %}
               </span>
@@ -91,45 +99,83 @@
   .toyora-prod__grid{
     display:grid;
     grid-template-columns:repeat(var(--toyora-cols-desktop, 6), 1fr);
-    gap:16px;
+    gap:20px;
   }
 
   .toyora-prod__card{
     position:relative;
     container-type:inline-size;
     container-name:toyora-card;
-    background:#fff; border-radius:var(--toyora-radius-md); box-shadow:var(--toyora-shadow);
-    color:var(--toyora-dark); overflow:hidden; display:flex; flex-direction:column;
-    transition:transform .15s ease;
+    background:#fff;
+    border:1px solid #ece8f2;
+    border-radius:14px;
+    box-shadow:0 4px 14px rgba(42,27,77,.06);
+    color:var(--toyora-dark);
+    overflow:hidden;
+    display:flex;
+    flex-direction:column;
+    transition:transform .15s ease, box-shadow .15s ease;
   }
-  .toyora-prod__card:hover{ transform:translateY(-4px); }
+  .toyora-prod__card:hover{
+    transform:translateY(-3px);
+    box-shadow:0 10px 22px rgba(42,27,77,.10);
+  }
 
   .toyora-prod__cardlink{ text-decoration:none; color:inherit; display:flex; flex-direction:column; flex:1; }
 
-  .toyora-prod__imgwrap{ position:relative; aspect-ratio:1/1; background:#faf9fc; width:100%; }
-  .toyora-prod__imgwrap img{ width:100%; height:100%; object-fit:cover; display:block; }
-  .toyora-prod__badge{ position:absolute; top:10px; left:10px; z-index:2; }
+  .toyora-prod__imgwrap{
+    position:relative;
+    width:100%;
+    aspect-ratio:1/1;
+    background:#fff;
+    overflow:hidden;
+    flex-shrink:0;
+  }
+  .toyora-prod__imgwrap img{
+    position:absolute;
+    inset:0;
+    width:100%;
+    height:100%;
+    max-width:none;
+    max-height:none;
+    object-fit:contain;
+    object-position:center;
+    padding:16px 12px 8px;
+    box-sizing:border-box;
+    display:block;
+  }
+  .toyora-prod__badge{
+    position:absolute; top:10px; left:10px; z-index:2;
+    font-size:10px; padding:4px 9px; letter-spacing:.02em;
+  }
 
   /* Wishlist button sits outside the <a> now, so clicking it never
      navigates to the product page. Positioned to match the old spot. */
   .toyora-prod__wish{
-    position:absolute; top:10px; right:10px; z-index:3;
-    background:#fff; width:28px; height:28px; border-radius:50%;
+    position:absolute; top:8px; right:8px; z-index:3;
+    background:transparent; width:32px; height:32px; border-radius:50%;
     display:flex; align-items:center; justify-content:center;
-    border:none; padding:0; cursor:pointer; color:var(--toyora-dark);
-    box-shadow:0 2px 6px rgba(42,27,77,.12);
+    border:none; padding:0; cursor:pointer; color:var(--toyora-red);
     transition:transform .15s ease, color .15s ease;
   }
   .toyora-prod__wish:hover{ transform:scale(1.08); }
   .toyora-prod__wish .toyora-wish-icon{ transition:fill .15s ease; }
-  .toyora-prod__wish.is-active{ color:var(--toyora-red); }
   .toyora-prod__wish.is-active .toyora-wish-icon path{ fill:currentColor; }
 
-  .toyora-prod__info{ padding:12px 12px 4px; display:flex; flex-direction:column; gap:4px; flex:1; }
-  .toyora-prod__title{ font-size:13px; font-weight:600; line-height:1.3; min-height:34px; }
-  .toyora-prod__rating{ font-size:11px; color:var(--toyora-gold); }
-  .toyora-prod__price{ font-size:14px; font-weight:700; color:var(--toyora-red); margin:2px 0 6px; }
-  .toyora-prod__price s{ color:#aaa; font-weight:400; font-size:12px; margin-left:4px; }
+  .toyora-prod__info{ padding:4px 12px 6px; display:flex; flex-direction:column; gap:4px; flex:1; }
+  .toyora-prod__title{
+    font-family:var(--toyora-font-display);
+    font-size:13px; font-weight:600; line-height:1.3;
+    color:#1a1a1a; min-height:34px;
+  }
+  .toyora-prod__rating{ display:flex; align-items:center; gap:4px; line-height:1; }
+  .toyora-prod__stars{ font-size:11px; color:var(--toyora-gold); letter-spacing:.5px; }
+  .toyora-prod__count{ font-size:11px; color:#9aa0a6; font-weight:500; }
+  .toyora-prod__price{
+    font-size:15px; font-weight:700; color:var(--toyora-dark); margin:2px 0 6px;
+  }
+  .toyora-prod__price--sale{ color:var(--toyora-red); }
+  .toyora-prod__price s{ color:#b0b4ba; font-weight:400; font-size:12px; margin-left:4px; }
 
   .toyora-prod__body{ padding:0 12px 12px; }
 
@@ -137,17 +183,19 @@
      (container query units), so "ADD TO CART" always fits on one line
      in full, on every device and column count — no cutoff, no ellipsis. */
   .toyora-prod__addbtn{
-    font-size:clamp(9.5px, 6.2cqi, 14px);
-    padding:10px 4px;
+    font-size:13px;
+    padding:5px 10px;
     justify-content:center;
     align-items:center;
     width:100%;
     white-space:nowrap;
     overflow:hidden;
-    gap:4px;
-    letter-spacing:-0.2px;
+    gap:6px;
+    letter-spacing:.02em;
     border:2px solid transparent;
+    border-radius:999px;
   }
+  .toyora-prod__addbtn .toyora-addbtn-icon{ flex-shrink:0; }
   .toyora-prod__addbtn .toyora-addbtn-text{ white-space:nowrap; }
   .toyora-prod__addbtn:disabled{ background:#ccc; box-shadow:none; cursor:not-allowed; transform:none; }
   .toyora-prod__addbtn.is-loading{ opacity:.7; pointer-events:none; }
@@ -156,18 +204,36 @@
      the button text at narrow screens so it doesn't wrap or clip. */
   @supports not (container-type: inline-size){
     @media screen and (max-width:480px){
-      .toyora-prod__addbtn{ font-size:10px; padding:9px 2px; }
+      .toyora-prod__addbtn{ font-size:13px; padding:5px 10px; }
     }
   }
 
-  /* Responsive: tablet */
   @media screen and (max-width:989px){
-    .toyora-prod__grid{ grid-template-columns:repeat(var(--toyora-cols-tablet, 3), 1fr); }
+    .toyora-prod__head h2{ font-size:22px; }
+    .toyora-prod__grid{
+      display:flex;
+      flex-wrap:nowrap;
+      gap:20px;
+      overflow-x:auto;
+      overflow-y:hidden;
+      -webkit-overflow-scrolling:touch;
+      scroll-snap-type:x mandatory;
+      overscroll-behavior-x:contain;
+      scrollbar-width:none;
+      padding-bottom:4px;
+    }
+    .toyora-prod__grid::-webkit-scrollbar{ display:none; }
+    .toyora-prod__card{
+      flex:0 0 auto;
+      width:220px;
+      max-width:none;
+      scroll-snap-align:start;
+    }
   }
-
-  /* Responsive: mobile — column count controlled separately in theme editor */
   @media screen and (max-width:480px){
-    .toyora-prod__grid{ grid-template-columns:repeat(var(--toyora-cols-mobile, 2), 1fr); gap:10px; }
+    .toyora-prod__head{ align-items:flex-start; }
+    .toyora-prod__head h2{ font-size:18px; }
+    .toyora-prod__card{ width:170px; }
     .toyora-prod__title{ font-size:12px; min-height:auto; }
   }
 </style>
