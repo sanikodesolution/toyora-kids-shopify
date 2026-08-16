@@ -1,0 +1,65 @@
+{{ 'toyora-theme.css' | asset_url | stylesheet_tag }}
+
+<section class="toyora-section toyora-why">
+  <div class="toyora-container">
+    <h2 class="toyora-heading toyora-why__heading">{{ section.settings.heading }} ✨</h2>
+    <div class="toyora-why__grid">
+      {% for block in section.blocks %}
+        <div class="toyora-why__item">
+          <span class="toyora-why__icon">{{ block.settings.emoji }}</span>
+          <strong>{{ block.settings.title }}</strong>
+          <small>{{ block.settings.subtitle }}</small>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<style>
+  .toyora-why{ padding:40px 0; }
+  .toyora-why__heading{ text-align:center; font-size:22px; margin-bottom:24px; }
+  .toyora-why__grid{ display:grid; grid-template-columns:repeat(6,1fr); gap:14px; }
+  .toyora-why__item{
+    background:#fff; border-radius:var(--toyora-radius-md); box-shadow:var(--toyora-shadow);
+    padding:20px 12px; text-align:center; display:flex; flex-direction:column; align-items:center; gap:6px;
+  }
+  .toyora-why__icon{ font-size:30px; }
+  .toyora-why__item strong{ font-size:13px; }
+  .toyora-why__item small{ font-size:11px; color:#8a8398; }
+
+  @media screen and (max-width:989px){ .toyora-why__grid{ grid-template-columns:repeat(3,1fr); } }
+  @media screen and (max-width:480px){ .toyora-why__grid{ grid-template-columns:repeat(2,1fr); } }
+</style>
+
+{% schema %}
+{
+  "name": "Toyora Why Choose Us",
+  "settings": [
+    { "type": "text", "id": "heading", "label": "Heading", "default": "WHY CHOOSE TOYORA?" }
+  ],
+  "blocks": [
+    {
+      "type": "item",
+      "name": "Trust item",
+      "settings": [
+        { "type": "text", "id": "emoji", "label": "Emoji", "default": "🛡️" },
+        { "type": "text", "id": "title", "label": "Title", "default": "Safe Material" },
+        { "type": "text", "id": "subtitle", "label": "Subtitle", "default": "100% Non-Toxic" }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Toyora Why Choose Us",
+      "blocks": [
+        { "type": "item", "settings": { "emoji": "🛡️", "title": "Safe Material", "subtitle": "100% Non-Toxic" } },
+        { "type": "item", "settings": { "emoji": "⭐", "title": "Premium Quality", "subtitle": "Durable & Long Lasting" } },
+        { "type": "item", "settings": { "emoji": "🚚", "title": "Fast Delivery", "subtitle": "Get Your Order Quickly" } },
+        { "type": "item", "settings": { "emoji": "💵", "title": "Cash On Delivery", "subtitle": "Pay When You Receive" } },
+        { "type": "item", "settings": { "emoji": "🔄", "title": "Easy Return", "subtitle": "Hassle Free Return" } },
+        { "type": "item", "settings": { "emoji": "❤️", "title": "Trusted Store", "subtitle": "1000+ Happy Parents" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

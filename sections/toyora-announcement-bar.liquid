@@ -1,0 +1,81 @@
+{{ 'toyora-theme.css' | asset_url | stylesheet_tag }}
+
+<div class="toyora-announce">
+  <div class="toyora-announce__track">
+    {% for block in section.blocks %}
+      <span class="toyora-announce__item">
+        {% if block.settings.icon != blank %}{{ block.settings.icon }}{% endif %}
+        {{ block.settings.text }}
+      </span>
+    {% endfor %}
+    {% comment %} duplicate for seamless marquee loop {% endcomment %}
+    {% for block in section.blocks %}
+      <span class="toyora-announce__item" aria-hidden="true">
+        {% if block.settings.icon != blank %}{{ block.settings.icon }}{% endif %}
+        {{ block.settings.text }}
+      </span>
+    {% endfor %}
+  </div>
+</div>
+
+<style>
+  .toyora-announce{
+    background:linear-gradient(90deg, var(--toyora-red), var(--toyora-orange));
+    overflow:hidden;
+    padding:8px 0;
+  }
+  .toyora-announce__track{
+    display:flex;
+    gap:48px;
+    width:max-content;
+    animation:toyora-marquee {{ section.settings.speed }}s linear infinite;
+  }
+  .toyora-announce__item{
+    color:#fff;
+    font-family:var(--toyora-font-display);
+    font-size:13px;
+    font-weight:600;
+    white-space:nowrap;
+    display:flex;
+    align-items:center;
+    gap:6px;
+  }
+  @keyframes toyora-marquee{
+    from{ transform:translateX(0); }
+    to{ transform:translateX(-50%); }
+  }
+  @media (prefers-reduced-motion: reduce){
+    .toyora-announce__track{ animation:none; overflow-x:auto; }
+  }
+</style>
+
+{% schema %}
+{
+  "name": "Toyora Announcement Bar",
+  "settings": [
+    { "type": "range", "id": "speed", "label": "Scroll speed (seconds)", "min": 10, "max": 60, "step": 5, "default": 25 }
+  ],
+  "blocks": [
+    {
+      "type": "item",
+      "name": "Announcement item",
+      "settings": [
+        { "type": "text", "id": "icon", "label": "Icon (emoji)", "default": "🚚" },
+        { "type": "text", "id": "text", "label": "Text", "default": "Free Delivery Over ৳999" }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Toyora Announcement Bar",
+      "blocks": [
+        { "type": "item", "settings": { "icon": "🚚", "text": "Free Delivery Over ৳999" } },
+        { "type": "item", "settings": { "icon": "🧸", "text": "Premium Quality Toys" } },
+        { "type": "item", "settings": { "icon": "💵", "text": "Cash On Delivery" } },
+        { "type": "item", "settings": { "icon": "↩️", "text": "7 Days Easy Return" } },
+        { "type": "item", "settings": { "icon": "⭐", "text": "1000+ Happy Customers" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

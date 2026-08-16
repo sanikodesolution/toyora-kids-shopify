@@ -1,0 +1,396 @@
+{%- comment -%}
+  Trust Badges Section
+  - Sits right below the banner/image section above it
+  - Overlaps UPWARD onto that section
+  - Overlap amount (desktop & mobile) is controlled from the Theme Customizer
+{%- endcomment -%}
+
+{%- assign cols_desktop = section.settings.columns_desktop -%}
+{%- assign cols_mobile = section.settings.columns_mobile -%}
+
+<div
+  class="trust-badges-wrapper color-{{ section.settings.color_scheme }}"
+  style="
+    --tb-overlap-desktop: {{ section.settings.overlap_desktop }}px;
+    --tb-overlap-mobile: {{ section.settings.overlap_mobile }}px;
+    --tb-radius: {{ section.settings.border_radius }}px;
+    --tb-bg: {{ section.settings.background_color }};
+    --tb-shadow: {% if section.settings.enable_shadow %}0 10px 30px rgba(0,0,0,0.12){% else %}none{% endif %};
+    --tb-max-width: {{ section.settings.max_width }}px;
+    --tb-cols-desktop: {{ cols_desktop }};
+    --tb-cols-mobile: {{ cols_mobile }};
+  "
+>
+  <div class="trust-badges-container">
+    <div class="trust-badges-bar">
+      {%- for block in section.blocks -%}
+        {%- case block.type -%}
+          {%- when 'badge' -%}
+            <div class="trust-badge-item" {{ block.shopify_attributes }}>
+              <div class="trust-badge-icon" style="color: {{ block.settings.icon_color }};">
+                {%- case block.settings.icon -%}
+                  {%- when 'truck' -%}
+                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M1 3h13v11H1V3z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/>
+                      <path d="M14 8h4l4 4v2h-8V8z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/>
+                      <circle cx="5.5" cy="17.5" r="2" stroke="currentColor" stroke-width="1.6"/>
+                      <circle cx="17.5" cy="17.5" r="2" stroke="currentColor" stroke-width="1.6"/>
+                    </svg>
+                  {%- when 'shield' -%}
+                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M12 2l8 3v6c0 5-3.4 8.7-8 11-4.6-2.3-8-6-8-11V5l8-3z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/>
+                      <path d="M8.5 12l2.3 2.3L15.5 9.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                  {%- when 'smile' -%}
+                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <circle cx="12" cy="12" r="9.2" stroke="currentColor" stroke-width="1.6"/>
+                      <circle cx="8.7" cy="10.2" r="1.1" fill="currentColor"/>
+                      <circle cx="15.3" cy="10.2" r="1.1" fill="currentColor"/>
+                      <path d="M8 14c1 1.3 2.5 2 4 2s3-.7 4-2" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+                    </svg>
+                  {%- when 'return' -%}
+                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M4 12a8 8 0 0 1 13.7-5.7L20 8" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+                      <path d="M20 4v4h-4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+                      <path d="M20 12a8 8 0 0 1-13.7 5.7L4 16" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+                      <path d="M4 20v-4h4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                  {%- when 'custom' -%}
+                    {%- if block.settings.custom_icon != blank -%}
+                      {{ block.settings.custom_icon | image_url: width: 60 | image_tag: loading: 'lazy', alt: block.settings.title }}
+                    {%- endif -%}
+                {%- endcase -%}
+              </div>
+              <div class="trust-badge-text">
+                <strong class="trust-badge-title">{{ block.settings.title }}</strong>
+                <span class="trust-badge-subtitle">{{ block.settings.subtitle }}</span>
+              </div>
+            </div>
+        {%- endcase -%}
+      {%- endfor -%}
+    </div>
+  </div>
+</div>
+
+{% style %}
+  .trust-badges-wrapper {
+    position: relative;
+    z-index: 5;
+    width: 100%;
+    margin-top: calc(-1 * var(--tb-overlap-desktop));
+    padding: 0 16px;
+    box-sizing: border-box;
+  }
+
+  .trust-badges-container {
+    max-width: var(--tb-max-width);
+    margin: 0 auto;
+  }
+
+  .trust-badges-bar {
+    background: var(--tb-bg);
+    border-radius: var(--tb-radius);
+    box-shadow: var(--tb-shadow);
+    display: grid;
+    grid-template-columns: repeat(var(--tb-cols-desktop), 1fr);
+    padding: 24px 32px;
+    row-gap: 20px;
+    column-gap: 0;
+  }
+
+  .trust-badge-item {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 8px 24px;
+    min-width: 0;
+  }
+
+  .trust-badge-icon {
+    flex: 0 0 auto;
+    width: 40px;
+    height: 40px;
+  }
+
+  .trust-badge-icon svg,
+  .trust-badge-icon img {
+    width: 100%;
+    height: 100%;
+    display: block;
+    object-fit: contain;
+  }
+
+  .trust-badge-text {
+    display: flex;
+    flex-direction: column;
+    line-height: 1.3;
+    min-width: 0;
+  }
+
+  .trust-badge-title {
+    font-size: 16px;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+    color: var(--color-foreground, #14213d);
+  }
+
+  .trust-badge-subtitle {
+    font-size: 14px;
+    color: var(--color-foreground-secondary, #555);
+    margin-top: 2px;
+  }
+
+  {%- if section.settings.enable_divider %}
+    /* vertical dividers between columns (desktop) */
+    .trust-badge-item:not(:nth-child({{ cols_desktop }}n)) {
+      border-right: 1px solid rgba(0, 0, 0, 0.12);
+    }
+    /* horizontal dividers between rows (desktop) */
+    .trust-badge-item:nth-child(n+{{ cols_desktop | plus: 1 }}) {
+      border-top: 1px solid rgba(0, 0, 0, 0.12);
+      padding-top: 20px;
+    }
+  {%- endif %}
+
+  @media screen and (max-width: 749px) {
+    .trust-badges-wrapper {
+      margin-top: calc(-1 * var(--tb-overlap-mobile));
+      padding: 0 12px;
+    }
+    .trust-badges-bar {
+      grid-template-columns: repeat(var(--tb-cols-mobile), 1fr);
+      row-gap: 18px;
+      column-gap: 10px;
+      padding: 20px 16px;
+    }
+    .trust-badge-item {
+      min-width: 0;
+      width: 100%;
+      padding: 0;
+      align-items: center;
+      border: none !important;
+    }
+    .trust-badge-icon {
+      width: 32px;
+      height: 32px;
+      flex: 0 0 32px;
+    }
+    .trust-badge-title {
+      font-size: 13px;
+    }
+    .trust-badge-subtitle {
+      font-size: 11.5px;
+    }
+
+    {%- if section.settings.enable_divider %}
+      .trust-badge-item:not(:nth-child({{ cols_mobile }}n)) {
+        border-right: 1px solid rgba(0, 0, 0, 0.12) !important;
+      }
+      .trust-badge-item:nth-child(n+{{ cols_mobile | plus: 1 }}) {
+        border-top: 1px solid rgba(0, 0, 0, 0.12) !important;
+        padding-top: 14px !important;
+      }
+    {%- endif %}
+  }
+
+  @media screen and (max-width: 380px) {
+    .trust-badge-text {
+      line-height: 1.25;
+    }
+    .trust-badge-item {
+      gap: 10px;
+    }
+  }
+{% endstyle %}
+
+{% schema %}
+{
+  "name": "Trust Badges Bar",
+  "tag": "section",
+  "class": "section-trust-badges",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Overlap position"
+    },
+    {
+      "type": "range",
+      "id": "overlap_desktop",
+      "label": "Overlap onto section above (desktop)",
+      "min": 0,
+      "max": 150,
+      "step": 5,
+      "unit": "px",
+      "default": 60
+    },
+    {
+      "type": "range",
+      "id": "overlap_mobile",
+      "label": "Overlap onto section above (mobile)",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "unit": "px",
+      "default": 30
+    },
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "range",
+      "id": "columns_desktop",
+      "label": "Columns (desktop)",
+      "min": 1,
+      "max": 6,
+      "step": 1,
+      "default": 4
+    },
+    {
+      "type": "range",
+      "id": "columns_mobile",
+      "label": "Columns (mobile)",
+      "min": 1,
+      "max": 3,
+      "step": 1,
+      "default": 2
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_divider",
+      "label": "Show divider lines between items",
+      "default": true
+    },
+    {
+      "type": "range",
+      "id": "max_width",
+      "label": "Max width",
+      "min": 800,
+      "max": 1600,
+      "step": 20,
+      "unit": "px",
+      "default": 1200
+    },
+    {
+      "type": "range",
+      "id": "border_radius",
+      "label": "Corner radius",
+      "min": 0,
+      "max": 40,
+      "step": 2,
+      "unit": "px",
+      "default": 20
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_shadow",
+      "label": "Enable shadow",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "Colors"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Bar background",
+      "default": "#ffffff"
+    },
+    {
+      "type": "text",
+      "id": "color_scheme",
+      "label": "Color scheme class (optional, theme-dependent)",
+      "default": "1"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "badge",
+      "name": "Badge",
+      "settings": [
+        {
+          "type": "select",
+          "id": "icon",
+          "label": "Icon",
+          "options": [
+            { "value": "truck", "label": "Delivery truck" },
+            { "value": "shield", "label": "Shield check" },
+            { "value": "smile", "label": "Smiley face" },
+            { "value": "return", "label": "Return arrows" },
+            { "value": "custom", "label": "Custom image" }
+          ],
+          "default": "truck"
+        },
+        {
+          "type": "image_picker",
+          "id": "custom_icon",
+          "label": "Custom icon image (used if icon = Custom image)"
+        },
+        {
+          "type": "color",
+          "id": "icon_color",
+          "label": "Icon color",
+          "default": "#e91e63"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title",
+          "default": "FREE DELIVERY"
+        },
+        {
+          "type": "text",
+          "id": "subtitle",
+          "label": "Subtitle",
+          "default": "On orders over ৳999"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Trust Badges Bar",
+      "blocks": [
+        {
+          "type": "badge",
+          "settings": {
+            "icon": "truck",
+            "icon_color": "#e91e63",
+            "title": "FREE DELIVERY",
+            "subtitle": "On orders over ৳999"
+          }
+        },
+        {
+          "type": "badge",
+          "settings": {
+            "icon": "shield",
+            "icon_color": "#2563eb",
+            "title": "PREMIUM QUALITY",
+            "subtitle": "100% Safe & Non-Toxic"
+          }
+        },
+        {
+          "type": "badge",
+          "settings": {
+            "icon": "smile",
+            "icon_color": "#f5a623",
+            "title": "HAPPY KIDS",
+            "subtitle": "Designed for Fun & Learning"
+          }
+        },
+        {
+          "type": "badge",
+          "settings": {
+            "icon": "return",
+            "icon_color": "#22a559",
+            "title": "EASY RETURN",
+            "subtitle": "7 Days Easy Return"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

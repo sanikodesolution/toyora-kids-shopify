@@ -1,0 +1,87 @@
+/* ==========================================================================
+   TOYORA KIDS — Shared Design Tokens
+   Paste this file into Shopify Admin > Online Store > Edit Code > Assets
+   File name must be: toyora-theme.css
+   ========================================================================== */
+
+:root{
+  --toyora-red:#FF3B6E;
+  --toyora-orange:#FF9B3D;
+  --toyora-green:#3ECF6B;
+  --toyora-blue:#3D9DFF;
+  --toyora-purple:#9B6BFF;
+  --toyora-gold:#FFC93D;
+  --toyora-dark:#2A1B4D;
+  --toyora-cream:#FFF8F0;
+  --toyora-font-display:'Fredoka', 'Fredoka One', sans-serif;
+  --toyora-font-body:'Nunito', sans-serif;
+  --toyora-radius-lg:24px;
+  --toyora-radius-md:16px;
+  --toyora-radius-sm:10px;
+  --toyora-shadow: 0 8px 24px rgba(42,27,77,0.10);
+}
+
+.toyora-section{
+  font-family:var(--toyora-font-body);
+  color:var(--toyora-dark);
+}
+
+.toyora-section h1,
+.toyora-section h2,
+.toyora-section h3,
+.toyora-section .toyora-heading{
+  font-family:var(--toyora-font-display);
+  font-weight:600;
+  letter-spacing:-0.01em;
+}
+
+.toyora-btn{
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  padding:14px 10px;
+  border-radius:24px;
+  font-family:var(--toyora-font-display);
+  font-weight:600;
+  font-size:15px;
+  text-decoration:none;
+  border:2px solid transparent;
+  cursor:pointer;
+  transition:transform .15s ease, box-shadow .15s ease;
+}
+.toyora-btn:hover{ transform:translateY(-2px); }
+
+.toyora-btn--primary{
+  background:var(--toyora-red);
+  color:#fff;
+  box-shadow:0 6px 18px rgba(255,59,110,.35);
+}
+.toyora-btn--outline{
+  background:#fff;
+  color:var(--toyora-red);
+  border-color:var(--toyora-red);
+}
+
+.toyora-badge{
+  display:inline-block;
+  padding:4px 12px;
+  border-radius:999px;
+  font-size:12px;
+  font-weight:700;
+  font-family:var(--toyora-font-display);
+}
+.toyora-badge--red{ background:var(--toyora-red); color:#fff; }
+.toyora-badge--orange{ background:var(--toyora-orange); color:#fff; }
+.toyora-badge--blue{ background:var(--toyora-blue); color:#fff; }
+.toyora-badge--green{ background:var(--toyora-green); color:#fff; }
+.toyora-badge--purple{ background:var(--toyora-purple); color:#fff; }
+
+.toyora-container{
+  max-width:1280px;
+  margin:0 auto;
+  padding:0 24px;
+}
+
+@media screen and (max-width:749px){
+  .toyora-container{ padding:0 16px; }
+}

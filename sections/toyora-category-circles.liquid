@@ -1,0 +1,99 @@
+{{ 'toyora-theme.css' | asset_url | stylesheet_tag }}
+
+<section class="toyora-section toyora-cat">
+  <div class="toyora-container">
+    <div class="toyora-cat__head">
+      <h2 class="toyora-heading">{{ section.settings.heading }} ✨</h2>
+      {% if section.settings.view_all_link != blank %}
+        <a href="{{ section.settings.view_all_link }}" class="toyora-cat__viewall">{{ section.settings.view_all_text }} →</a>
+      {% endif %}
+    </div>
+
+    <div class="toyora-cat__grid">
+      {% for block in section.blocks %}
+        <a href="{{ block.settings.link }}" class="toyora-cat__item">
+          <span class="toyora-cat__circle" style="background:{{ block.settings.bg_color }};">
+            {% if block.settings.image != blank %}
+              <img src="{{ block.settings.image | image_url: width: 160 }}" alt="{{ block.settings.label }}" loading="lazy">
+            {% else %}
+              {{ block.settings.emoji }}
+            {% endif %}
+          </span>
+          <span class="toyora-cat__label">{{ block.settings.label }}</span>
+        </a>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<style>
+  .toyora-cat{ padding:48px 0; }
+  .toyora-cat__head{ display:flex; justify-content:space-between; align-items:center; margin-bottom:24px; }
+  .toyora-cat__head h2{ font-size:22px; color:var(--toyora-dark); margin:0; }
+  .toyora-cat__viewall{ color:var(--toyora-blue); font-weight:600; font-size:14px; text-decoration:none; }
+  .toyora-cat__grid{
+    display:grid;
+    grid-template-columns:repeat(8,1fr);
+    gap:16px;
+  }
+  .toyora-cat__item{ display:flex; flex-direction:column; align-items:center; gap:10px; text-decoration:none; color:var(--toyora-dark); }
+  .toyora-cat__circle{
+    width:88px; height:88px;
+    border-radius:50%;
+    display:flex; align-items:center; justify-content:center;
+    font-size:36px;
+    overflow:hidden;
+    box-shadow:var(--toyora-shadow);
+    transition:transform .15s ease;
+  }
+  .toyora-cat__circle img{ width:100%; height:100%; object-fit:cover; }
+  .toyora-cat__item:hover .toyora-cat__circle{ transform:translateY(-4px) scale(1.05); }
+  .toyora-cat__label{ font-size:13px; font-weight:600; text-align:center; }
+
+  @media screen and (max-width:989px){
+    .toyora-cat__grid{ grid-template-columns:repeat(4,1fr); }
+  }
+  @media screen and (max-width:480px){
+    .toyora-cat__grid{ grid-template-columns:repeat(3,1fr); gap:12px; }
+    .toyora-cat__circle{ width:68px; height:68px; font-size:28px; }
+  }
+</style>
+
+{% schema %}
+{
+  "name": "Toyora Shop by Category",
+  "settings": [
+    { "type": "text", "id": "heading", "label": "Heading", "default": "SHOP BY CATEGORY" },
+    { "type": "text", "id": "view_all_text", "label": "View all text", "default": "View All Categories" },
+    { "type": "url", "id": "view_all_link", "label": "View all link" }
+  ],
+  "blocks": [
+    {
+      "type": "category",
+      "name": "Category",
+      "settings": [
+        { "type": "text", "id": "label", "label": "Label", "default": "Soft Toys" },
+        { "type": "text", "id": "emoji", "label": "Emoji fallback (if no image)", "default": "🧸" },
+        { "type": "image_picker", "id": "image", "label": "Image" },
+        { "type": "color", "id": "bg_color", "label": "Circle background", "default": "#FFE3EC" },
+        { "type": "url", "id": "link", "label": "Link (collection)" }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Toyora Shop by Category",
+      "blocks": [
+        { "type": "category", "settings": { "label": "Cars & Vehicles", "emoji": "🚗", "bg_color": "#FFE3EC" } },
+        { "type": "category", "settings": { "label": "Soft Toys", "emoji": "🧸", "bg_color": "#FFE9D6" } },
+        { "type": "category", "settings": { "label": "Puzzles", "emoji": "🧩", "bg_color": "#E3F0FF" } },
+        { "type": "category", "settings": { "label": "DIY & Craft", "emoji": "🎨", "bg_color": "#FFF3D6" } },
+        { "type": "category", "settings": { "label": "Baby Toys", "emoji": "🍼", "bg_color": "#FFEAD6" } },
+        { "type": "category", "settings": { "label": "Outdoor Play", "emoji": "🚲", "bg_color": "#E9E3FF" } },
+        { "type": "category", "settings": { "label": "Board Games", "emoji": "🎲", "bg_color": "#FFE3E3" } },
+        { "type": "category", "settings": { "label": "Gift Ideas", "emoji": "🎁", "bg_color": "#FFF0D6" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

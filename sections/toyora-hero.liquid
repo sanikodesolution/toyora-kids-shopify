@@ -1,0 +1,154 @@
+{{ 'toyora-theme.css' | asset_url | stylesheet_tag }}
+
+<section class="toyora-section toyora-hero" style="background: linear-gradient(180deg, {{ section.settings.bg_top }} 0%, {{ section.settings.bg_bottom }} 100%);">
+  <div class="toyora-container toyora-hero__inner">
+
+    {% if section.settings.image_left != blank %}
+      <img class="toyora-hero__side toyora-hero__side--left" src="{{ section.settings.image_left | image_url: width: 400 }}" alt="" width="200" loading="eager">
+    {% endif %}
+    {% if section.settings.image_right != blank %}
+      <img class="toyora-hero__side toyora-hero__side--right" src="{{ section.settings.image_right | image_url: width: 400 }}" alt="" width="200" loading="eager">
+    {% endif %}
+
+    <div class="toyora-hero__content">
+      <h1 class="toyora-hero__title">
+        {{ section.settings.title_line1 }}<br>
+        <span class="toyora-hero__title--accent">{{ section.settings.title_line2 }}</span>
+      </h1>
+      <p class="toyora-hero__subtitle">{{ section.settings.subtitle }}</p>
+
+      {% if section.blocks.size > 0 %}
+        <div class="toyora-hero__pills">
+          {% for block in section.blocks %}
+            <span class="toyora-badge toyora-badge--{{ block.settings.color }}">{{ block.settings.label }}</span>
+          {% endfor %}
+        </div>
+      {% endif %}
+
+      <div class="toyora-hero__ctas">
+        {% if section.settings.btn1_text != blank %}
+          <a href="{{ section.settings.btn1_link }}" class="toyora-btn toyora-btn--primary">🛒 {{ section.settings.btn1_text }}</a>
+        {% endif %}
+        {% if section.settings.btn2_text != blank %}
+          <a href="{{ section.settings.btn2_link }}" class="toyora-btn toyora-btn--outline">🎁 {{ section.settings.btn2_text }}</a>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+
+  {% if section.settings.show_feature_strip %}
+    <div class="toyora-container">
+      <div class="toyora-feature-strip">
+        <div class="toyora-feature-strip__item">
+          <span class="toyora-feature-strip__icon">🚚</span>
+          <div><strong>Free Delivery</strong><br><small>On orders over ৳999</small></div>
+        </div>
+        <div class="toyora-feature-strip__item">
+          <span class="toyora-feature-strip__icon">🛡️</span>
+          <div><strong>Premium Quality</strong><br><small>100% Safe & Non-Toxic</small></div>
+        </div>
+        <div class="toyora-feature-strip__item">
+          <span class="toyora-feature-strip__icon">😊</span>
+          <div><strong>Happy Kids</strong><br><small>Designed for Fun & Learning</small></div>
+        </div>
+        <div class="toyora-feature-strip__item">
+          <span class="toyora-feature-strip__icon">🔄</span>
+          <div><strong>Easy Return</strong><br><small>7 Days Easy Return</small></div>
+        </div>
+      </div>
+    </div>
+  {% endif %}
+</section>
+
+<style>
+  .toyora-hero{ position:relative; padding:56px 0 0; overflow:hidden; }
+  .toyora-hero__inner{ position:relative; display:flex; justify-content:center; padding-bottom:48px; }
+  .toyora-hero__content{ text-align:center; max-width:640px; position:relative; z-index:2; }
+  .toyora-hero__title{
+    font-size:clamp(32px,5vw,52px);
+    line-height:1.1;
+    margin:0 0 16px;
+    color:var(--toyora-dark);
+  }
+  .toyora-hero__title--accent{
+    background:linear-gradient(90deg, var(--toyora-red), var(--toyora-purple));
+    -webkit-background-clip:text;
+    background-clip:text;
+    color:transparent;
+  }
+  .toyora-hero__subtitle{ font-size:17px; color:#5b5470; margin-bottom:20px; }
+  .toyora-hero__pills{ display:flex; flex-wrap:wrap; justify-content:center; gap:8px; margin-bottom:28px; }
+  .toyora-hero__ctas{ display:flex; flex-wrap:wrap; gap:14px; justify-content:center; }
+  .toyora-hero__side{ position:absolute; top:20px; z-index:1; opacity:.95; }
+  .toyora-hero__side--left{ left:0; }
+  .toyora-hero__side--right{ right:0; }
+
+  .toyora-feature-strip{
+    background:#fff;
+    border-radius:var(--toyora-radius-lg);
+    box-shadow:var(--toyora-shadow);
+    display:flex;
+    flex-wrap:wrap;
+    justify-content:space-between;
+    gap:20px;
+    padding:24px 32px;
+    margin-bottom:-40px;
+    position:relative;
+    z-index:3;
+  }
+  .toyora-feature-strip__item{ display:flex; align-items:center; gap:10px; font-size:13px; flex:1; min-width:180px; }
+  .toyora-feature-strip__icon{ font-size:26px; }
+
+  @media screen and (max-width:749px){
+    .toyora-hero__side{ display:none; }
+    .toyora-feature-strip{ flex-direction:column; margin-bottom:-20px; }
+  }
+</style>
+
+{% schema %}
+{
+  "name": "Toyora Hero Banner",
+  "settings": [
+    { "type": "color", "id": "bg_top", "label": "Background top color", "default": "#EAF4FF" },
+    { "type": "color", "id": "bg_bottom", "label": "Background bottom color", "default": "#FFFFFF" },
+    { "type": "text", "id": "title_line1", "label": "Title line 1", "default": "LET'S MAKE" },
+    { "type": "text", "id": "title_line2", "label": "Title line 2 (accent)", "default": "PLAYTIME MAGICAL!" },
+    { "type": "text", "id": "subtitle", "label": "Subtitle", "default": "Premium Toys for Happy Kids & Smart Learning" },
+    { "type": "text", "id": "btn1_text", "label": "Primary button text", "default": "SHOP NOW" },
+    { "type": "url", "id": "btn1_link", "label": "Primary button link" },
+    { "type": "text", "id": "btn2_text", "label": "Secondary button text", "default": "EXPLORE COLLECTION" },
+    { "type": "url", "id": "btn2_link", "label": "Secondary button link" },
+    { "type": "image_picker", "id": "image_left", "label": "Left decorative image (e.g. rocket/bear)" },
+    { "type": "image_picker", "id": "image_right", "label": "Right decorative image (e.g. plane/train)" },
+    { "type": "checkbox", "id": "show_feature_strip", "label": "Show 4-feature strip", "default": true }
+  ],
+  "blocks": [
+    {
+      "type": "pill",
+      "name": "Category pill",
+      "settings": [
+        { "type": "text", "id": "label", "label": "Label", "default": "Educational" },
+        { "type": "select", "id": "color", "label": "Color", "options": [
+          {"value":"red","label":"Red"},
+          {"value":"orange","label":"Orange"},
+          {"value":"blue","label":"Blue"},
+          {"value":"green","label":"Green"},
+          {"value":"purple","label":"Purple"}
+        ], "default": "orange" }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Toyora Hero Banner",
+      "blocks": [
+        { "type": "pill", "settings": { "label": "Educational", "color": "red" } },
+        { "type": "pill", "settings": { "label": "Creative", "color": "orange" } },
+        { "type": "pill", "settings": { "label": "STEM", "color": "blue" } },
+        { "type": "pill", "settings": { "label": "Outdoor Fun", "color": "green" } },
+        { "type": "pill", "settings": { "label": "Games", "color": "purple" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

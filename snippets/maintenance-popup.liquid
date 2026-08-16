@@ -1,0 +1,81 @@
+{% comment %}
+  Maintenance Popup - শুধু কোড এডিটর থেকে কন্ট্রোল হবে
+  নিচের তিনটি ভ্যালু নিজের মতো করে বসান
+{% endcomment %}
+
+{%- assign popup_enabled = true -%} {% comment %} true / false দিয়ে পুরো পপআপ ON/OFF করুন {% endcomment %}
+
+{%- assign start_time = "2026-08-16 00:00" -%} {% comment %} YYYY-MM-DD HH:MM ফরম্যাটে {% endcomment %}
+{%- assign end_time   = "2056-08-16 23:59" -%}
+
+{%- assign now = 'now' | date: '%s' -%}
+{%- assign start_ts = start_time | date: '%s' -%}
+{%- assign end_ts = end_time | date: '%s' -%}
+
+{%- if popup_enabled and now >= start_ts and now <= end_ts -%}
+  <div id="maintenance-popup-overlay">
+    <div id="maintenance-popup-box">
+      <div class="maintenance-icon">🛠️</div>
+      <h2>We're Currently Under Maintenance</h2>
+      <p>We're working hard to update and improve our store. Please check back soon. Sorry for the inconvenience!</p>
+    </div>
+  </div>
+
+  <style>
+    #maintenance-popup-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.85);
+      z-index: 2147483647;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      backdrop-filter: blur(4px);
+    }
+
+    #maintenance-popup-box {
+      background: #ffffff;
+      max-width: 420px;
+      width: 90%;
+      padding: 40px 30px;
+      border-radius: 12px;
+      text-align: center;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+      font-family: inherit;
+    }
+
+    .maintenance-icon {
+      font-size: 48px;
+      margin-bottom: 15px;
+    }
+
+    #maintenance-popup-box h2 {
+      margin: 0 0 15px;
+      font-size: 22px;
+      color: #111;
+    }
+
+    #maintenance-popup-box p {
+      margin: 0;
+      font-size: 15px;
+      color: #555;
+      line-height: 1.6;
+    }
+  </style>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      document.body.style.overflow = 'hidden';
+    });
+    document.documentElement.style.overflow = 'hidden';
+
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape') {
+        e.preventDefault();
+      }
+    });
+  </script>
+{%- endif -%}
