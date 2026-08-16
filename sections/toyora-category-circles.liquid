@@ -3,7 +3,15 @@
 <section class="toyora-section toyora-cat">
   <div class="toyora-container">
     <div class="toyora-cat__head">
-      <h2 class="toyora-heading">{{ section.settings.heading }} ✨</h2>
+      <div class="toyora-cat__titlewrap">
+        <span class="toyora-cat__confetti" aria-hidden="true">
+          <i class="d d1"></i><i class="d d2"></i><i class="d d3"></i>
+          <i class="d d4"></i><i class="d d5"></i><i class="d d6"></i>
+          <i class="s s1"></i><i class="s s2"></i>
+          <i class="l l1"></i><i class="l l2"></i>
+        </span>
+        <h2 class="toyora-heading toyora-cat__heading">{{ section.settings.heading }}</h2>
+      </div>
       {% if section.settings.view_all_link != blank %}
         <a href="{{ section.settings.view_all_link }}" class="toyora-cat__viewall">{{ section.settings.view_all_text }} →</a>
       {% endif %}
@@ -11,12 +19,15 @@
 
     <div class="toyora-cat__grid">
       {% for block in section.blocks %}
-        <a href="{{ block.settings.link }}" class="toyora-cat__item">
-          <span class="toyora-cat__circle" style="background:{{ block.settings.bg_color }};">
+        <a href="{{ block.settings.link }}" class="toyora-cat__item" {{ block.shopify_attributes }}>
+          <span
+            class="toyora-cat__circle"
+            style="background: radial-gradient(circle at 38% 32%, #fff 0%, {{ block.settings.bg_color }} 68%);"
+          >
             {% if block.settings.image != blank %}
-              <img src="{{ block.settings.image | image_url: width: 160 }}" alt="{{ block.settings.label }}" loading="lazy">
+              <img src="{{ block.settings.image | image_url: width: 200 }}" alt="{{ block.settings.label | escape }}" loading="lazy" width="90" height="90">
             {% else %}
-              {{ block.settings.emoji }}
+              <span class="toyora-cat__emoji">{{ block.settings.emoji }}</span>
             {% endif %}
           </span>
           <span class="toyora-cat__label">{{ block.settings.label }}</span>
@@ -27,35 +38,160 @@
 </section>
 
 <style>
-  .toyora-cat{ padding:48px 0; }
-  .toyora-cat__head{ display:flex; justify-content:space-between; align-items:center; margin-bottom:24px; }
-  .toyora-cat__head h2{ font-size:22px; color:var(--toyora-dark); margin:0; }
-  .toyora-cat__viewall{ color:var(--toyora-blue); font-weight:600; font-size:14px; text-decoration:none; }
+  .toyora-cat{
+    padding:40px 0 48px;
+    background:#fff;
+  }
+  .toyora-cat__head{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:16px;
+    margin-bottom:28px;
+  }
+  .toyora-cat__titlewrap{
+    position:relative;
+    display:inline-block;
+    padding:10px 18px 8px 10px;
+  }
+  .toyora-cat__heading{
+    position:relative;
+    z-index:1;
+    margin:0;
+    font-size:26px;
+    font-weight:700;
+    letter-spacing:0.02em;
+    text-transform:uppercase;
+    color:var(--toyora-dark);
+    line-height:1.15;
+  }
+  .toyora-cat__confetti{
+    position:absolute;
+    inset:0;
+    pointer-events:none;
+    overflow:visible;
+  }
+  .toyora-cat__confetti .d{
+    position:absolute;
+    width:6px;
+    height:6px;
+    border-radius:50%;
+  }
+  .toyora-cat__confetti .d1{ left:0; top:6px; background:#3D9DFF; }
+  .toyora-cat__confetti .d2{ left:14px; top:0; width:5px; height:5px; background:#FF3B6E; }
+  .toyora-cat__confetti .d3{ right:8px; top:2px; width:5px; height:5px; background:#3ECF6B; }
+  .toyora-cat__confetti .d4{ right:-2px; bottom:10px; background:#FF9B3D; }
+  .toyora-cat__confetti .d5{ left:42%; top:-2px; width:4px; height:4px; background:#9B6BFF; }
+  .toyora-cat__confetti .d6{ left:8px; bottom:2px; width:5px; height:5px; background:#FFC93D; }
+  .toyora-cat__confetti .s{
+    position:absolute;
+    width:8px;
+    height:8px;
+    background:currentColor;
+    clip-path:polygon(50% 0,61% 35%,100% 38%,70% 62%,79% 100%,50% 78%,21% 100%,30% 62%,0 38%,39% 35%);
+  }
+  .toyora-cat__confetti .s1{ right:22px; top:-4px; color:#FFC93D; }
+  .toyora-cat__confetti .s2{ left:-4px; bottom:8px; color:#FF3B6E; transform:scale(.75); }
+  .toyora-cat__confetti .l{
+    position:absolute;
+    width:10px;
+    height:2px;
+    border-radius:2px;
+    transform:rotate(-28deg);
+  }
+  .toyora-cat__confetti .l1{ right:0; top:16px; background:#3D9DFF; }
+  .toyora-cat__confetti .l2{ left:28px; bottom:0; background:#FF9B3D; transform:rotate(32deg); }
+
+  .toyora-cat__viewall{
+    color:var(--toyora-blue);
+    font-weight:600;
+    font-size:14px;
+    text-decoration:none;
+    white-space:nowrap;
+    flex-shrink:0;
+  }
+  .toyora-cat__viewall:hover{ text-decoration:underline; }
+
   .toyora-cat__grid{
     display:grid;
     grid-template-columns:repeat(8,1fr);
-    gap:16px;
+    gap:20px;
+    align-items:start;
   }
-  .toyora-cat__item{ display:flex; flex-direction:column; align-items:center; gap:10px; text-decoration:none; color:var(--toyora-dark); }
+  .toyora-cat__item{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:12px;
+    text-decoration:none;
+    color:var(--toyora-dark);
+  }
   .toyora-cat__circle{
-    width:90px; height:90px;
-    border-radius:50%;
-    display:flex; align-items:center; justify-content:center;
-    font-size:54px;
-    overflow:hidden;
-    box-shadow:var(--toyora-shadow);
-    transition:transform .15s ease;
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    flex-shrink: 0;
+    transition: transform .18s ease;
   }
-  .toyora-cat__circle img{ width:100%; height:100%; object-fit:cover; }
-  .toyora-cat__item:hover .toyora-cat__circle{ transform:translateY(-4px) scale(1.05); }
-  .toyora-cat__label{ font-size:13px; font-weight:600; text-align:center; }
+  .toyora-cat__circle img{
+    width:72%;
+    height:72%;
+    object-fit:contain;
+    filter:drop-shadow(0 6px 10px rgba(42,27,77,.16));
+    pointer-events:none;
+  }
+  .toyora-cat__emoji{
+    font-size:70px;
+    line-height:1;
+    filter:drop-shadow(0 4px 6px rgba(42,27,77,.12));
+    transition: all 500ms ease;
+  }
+  .toyora-cat__label{
+    font-family:var(--toyora-font-display);
+    font-size:13px;
+    font-weight:600;
+    text-align:center;
+    line-height:1.25;
+    color:var(--toyora-dark);
+    max-width:110px;
+  }
+  .toyora-cat__item:hover .toyora-cat__emoji{
+    transform:scale(1.2);
+  }
 
   @media screen and (max-width:989px){
-    .toyora-cat__grid{ grid-template-columns:repeat(4,1fr); }
+    .toyora-cat__heading{ font-size:22px; }
+    .toyora-cat__grid{
+      display:flex;
+      flex-wrap:nowrap;
+      gap:20px;
+      overflow-x:auto;
+      overflow-y:hidden;
+      -webkit-overflow-scrolling:touch;
+      scroll-snap-type:x mandatory;
+      overscroll-behavior-x:contain;
+      scrollbar-width:none;
+      padding-bottom:4px;
+    }
+    .toyora-cat__grid::-webkit-scrollbar{ display:none; }
+    .toyora-cat__item{
+      flex:0 0 auto;
+      width:120px;
+      scroll-snap-align:start;
+    }
+    .toyora-cat__label{ max-width:120px; }
   }
   @media screen and (max-width:480px){
-    .toyora-cat__grid{ grid-template-columns:repeat(3,1fr); gap:12px; }
-    .toyora-cat__circle{ width:68px; height:68px; font-size:28px; }
+    .toyora-cat__head{ align-items:flex-start; }
+    .toyora-cat__heading{ font-size:18px; }
+    .toyora-cat__item{ width:90px; }
+    .toyora-cat__circle{ width:90px; height:90px; }
+    .toyora-cat__emoji{ font-size:42px; }
+    .toyora-cat__label{ font-size:12px; max-width:90px; }
   }
 </style>
 
@@ -84,14 +220,14 @@
     {
       "name": "Toyora Shop by Category",
       "blocks": [
-        { "type": "category", "settings": { "label": "Cars & Vehicles", "emoji": "🚗", "bg_color": "#FFE3EC" } },
-        { "type": "category", "settings": { "label": "Soft Toys", "emoji": "🧸", "bg_color": "#FFE9D6" } },
-        { "type": "category", "settings": { "label": "Puzzles", "emoji": "🧩", "bg_color": "#E3F0FF" } },
-        { "type": "category", "settings": { "label": "DIY & Craft", "emoji": "🎨", "bg_color": "#FFF3D6" } },
-        { "type": "category", "settings": { "label": "Baby Toys", "emoji": "🍼", "bg_color": "#FFEAD6" } },
-        { "type": "category", "settings": { "label": "Outdoor Play", "emoji": "🚲", "bg_color": "#E9E3FF" } },
-        { "type": "category", "settings": { "label": "Board Games", "emoji": "🎲", "bg_color": "#FFE3E3" } },
-        { "type": "category", "settings": { "label": "Gift Ideas", "emoji": "🎁", "bg_color": "#FFF0D6" } }
+        { "type": "category", "settings": { "label": "Cars & Vehicles", "emoji": "🚗", "bg_color": "#FFD6E0" } },
+        { "type": "category", "settings": { "label": "Soft Toys", "emoji": "🧸", "bg_color": "#F6E4C4" } },
+        { "type": "category", "settings": { "label": "Puzzles", "emoji": "🧩", "bg_color": "#D6E8FF" } },
+        { "type": "category", "settings": { "label": "DIY & Craft", "emoji": "🎨", "bg_color": "#FFE0B8" } },
+        { "type": "category", "settings": { "label": "Baby Toys", "emoji": "🍼", "bg_color": "#FFF0C4" } },
+        { "type": "category", "settings": { "label": "Outdoor Play", "emoji": "🚲", "bg_color": "#E4D9FF" } },
+        { "type": "category", "settings": { "label": "Board Games", "emoji": "🎲", "bg_color": "#FFD6D6" } },
+        { "type": "category", "settings": { "label": "Gift Ideas", "emoji": "🎁", "bg_color": "#FFE9C4" } }
       ]
     }
   ]
