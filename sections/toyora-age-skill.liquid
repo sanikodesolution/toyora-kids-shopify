@@ -6,22 +6,20 @@
     <div class="toyora-agesk__col">
       <div class="toyora-agesk__head">
         <h3 class="toyora-heading">{{ section.settings.age_heading }}</h3>
-        {% if section.settings.age_view_all_link != blank %}
-          <a href="{{ section.settings.age_view_all_link }}">View All →</a>
-        {% endif %}
+        <a href="{{ section.settings.age_view_all_link | default: '#' }}" class="toyora-agesk__viewall">View All →</a>
       </div>
       <div class="toyora-agesk__row">
         {% for block in section.blocks %}
           {% if block.type == 'age' %}
-            <a href="{{ block.settings.link }}" class="toyora-agesk__item">
-              <span class="toyora-agesk__circle">
+            <a href="{{ block.settings.link }}" class="toyora-agesk__item" {{ block.shopify_attributes }}>
+              <span class="toyora-agesk__thumb toyora-agesk__thumb--age">
                 {% if block.settings.image != blank %}
-                  <img src="{{ block.settings.image | image_url: width: 140 }}" alt="{{ block.settings.label }}" loading="lazy">
+                  <img src="{{ block.settings.image | image_url: width: 280 }}" alt="{{ block.settings.label | escape }}" loading="lazy" width="120" height="120">
                 {% else %}
-                  {{ block.settings.emoji }}
+                  <span class="toyora-agesk__emoji">{{ block.settings.emoji }}</span>
                 {% endif %}
               </span>
-              <span>{{ block.settings.label }}</span>
+              <span class="toyora-agesk__label">{{ block.settings.label }}</span>
             </a>
           {% endif %}
         {% endfor %}
@@ -31,18 +29,20 @@
     <div class="toyora-agesk__col">
       <div class="toyora-agesk__head">
         <h3 class="toyora-heading">{{ section.settings.skill_heading }}</h3>
-        {% if section.settings.skill_view_all_link != blank %}
-          <a href="{{ section.settings.skill_view_all_link }}">View All →</a>
-        {% endif %}
+        <a href="{{ section.settings.skill_view_all_link | default: '#' }}" class="toyora-agesk__viewall">View All →</a>
       </div>
       <div class="toyora-agesk__row">
         {% for block in section.blocks %}
           {% if block.type == 'skill' %}
-            <a href="{{ block.settings.link }}" class="toyora-agesk__item">
-              <span class="toyora-agesk__square" style="background:{{ block.settings.bg_color }};">
-                {{ block.settings.emoji }}
+            <a href="{{ block.settings.link }}" class="toyora-agesk__item" {{ block.shopify_attributes }}>
+              <span class="toyora-agesk__thumb toyora-agesk__thumb--skill">
+                {% if block.settings.image != blank %}
+                  <img src="{{ block.settings.image | image_url: width: 280 }}" alt="{{ block.settings.label | escape }}" loading="lazy" width="120" height="120">
+                {% else %}
+                  <span class="toyora-agesk__emoji">{{ block.settings.emoji }}</span>
+                {% endif %}
               </span>
-              <span>{{ block.settings.label }}</span>
+              <span class="toyora-agesk__label">{{ block.settings.label }}</span>
             </a>
           {% endif %}
         {% endfor %}
@@ -54,19 +54,116 @@
 
 <style>
   .toyora-agesk{ padding:32px 0; }
-  .toyora-agesk__grid{ display:grid; grid-template-columns:1fr 1fr; gap:24px; }
-  .toyora-agesk__col{ background:#fff; border-radius:var(--toyora-radius-lg); box-shadow:var(--toyora-shadow); padding:22px; }
-  .toyora-agesk__head{ display:flex; justify-content:space-between; align-items:center; margin-bottom:16px; }
-  .toyora-agesk__head h3{ font-size:17px; margin:0; }
-  .toyora-agesk__head a{ font-size:13px; color:var(--toyora-blue); text-decoration:none; font-weight:600; }
-  .toyora-agesk__row{ display:flex; gap:14px; flex-wrap:wrap; }
-  .toyora-agesk__item{ display:flex; flex-direction:column; align-items:center; gap:6px; text-decoration:none; color:var(--toyora-dark); font-size:12px; font-weight:600; flex:1; min-width:60px; }
-  .toyora-agesk__circle{ width:64px; height:64px; border-radius:50%; overflow:hidden; background:#f2f0fa; display:flex; align-items:center; justify-content:center; font-size:26px; }
-  .toyora-agesk__circle img{ width:100%; height:100%; object-fit:cover; }
-  .toyora-agesk__square{ width:56px; height:56px; border-radius:16px; display:flex; align-items:center; justify-content:center; font-size:24px; }
+  .toyora-agesk__grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:20px;
+  }
+  .toyora-agesk__col{
+    background:#f7f6f4;
+    padding:22px 20px 24px;
+  }
+  .toyora-agesk__head{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:18px;
+    gap:12px;
+  }
+  .toyora-agesk__head h3{ font-size:18px; margin:0; color:var(--toyora-dark); }
+  .toyora-agesk__viewall{
+    font-size:13px;
+    color:var(--toyora-blue);
+    text-decoration:none;
+    font-weight:600;
+    white-space:nowrap;
+  }
+  .toyora-agesk__row{
+    display:flex;
+    align-items:flex-start;
+    justify-content:center;
+    gap:16px;
+  }
+  .toyora-agesk__item{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:flex-start;
+    gap:10px;
+    text-decoration:none;
+    color:var(--toyora-dark);
+    flex:1 1 0;
+    min-width:0;
+    max-width:110px;
+  }
+  .toyora-agesk__thumb{
+    width:100%;
+    aspect-ratio:1/1;
+    border-radius:0;
+    overflow:hidden;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    position:relative;
+    box-shadow:0 4px 12px rgba(42,27,77,.08);
+  }
+  .toyora-agesk__thumb--age{ background:#f6e8d8; }
+  .toyora-agesk__thumb--skill{ background:#fff; }
+  .toyora-agesk__thumb img{
+    position:absolute;
+    inset:0;
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    object-position:center;
+  }
+  .toyora-agesk__thumb--skill img{ object-fit:contain; padding:12px; box-sizing:border-box; }
+  .toyora-agesk__emoji{ font-size:42px; line-height:1; }
+  .toyora-agesk__label{
+    font-size:13px;
+    font-weight:700;
+    text-align:center;
+    line-height:1.25;
+    color:var(--toyora-dark);
+  }
 
-  @media screen and (max-width:749px){
-    .toyora-agesk__grid{ grid-template-columns:1fr; }
+  @media screen and (max-width:1199px){
+    .toyora-agesk__grid{
+      grid-template-columns:1fr;
+      gap:16px;
+    }
+    .toyora-agesk__col{ padding:18px 16px 20px; }
+    .toyora-agesk__row{
+      display:flex;
+      justify-content:space-between;
+      align-items:flex-start;
+      gap:10px;
+      overflow:visible;
+    }
+    .toyora-agesk__item{
+      flex:1 1 0;
+      max-width:none;
+      min-width:0;
+      gap:8px;
+    }
+    .toyora-agesk__thumb--age{
+      aspect-ratio:3/4;
+    }
+    .toyora-agesk__thumb--skill{
+      aspect-ratio:1/1;
+    }
+    .toyora-agesk__thumb--skill img{ padding:8px; }
+    .toyora-agesk__emoji{ font-size:28px; }
+    .toyora-agesk__label{ font-size:11px; }
+  }
+
+  @media screen and (max-width:480px){
+    .toyora-agesk__col{ padding:16px 12px 18px; }
+    .toyora-agesk__head{ margin-bottom:14px; }
+    .toyora-agesk__head h3{ font-size:15px; }
+    .toyora-agesk__row{ gap:8px; }
+    .toyora-agesk__label{ font-size:10px; }
+    .toyora-agesk__emoji{ font-size:24px; }
   }
 </style>
 
@@ -86,7 +183,7 @@
       "settings": [
         { "type": "text", "id": "label", "label": "Label", "default": "0-2 Years" },
         { "type": "text", "id": "emoji", "label": "Emoji fallback", "default": "👶" },
-        { "type": "image_picker", "id": "image", "label": "Image" },
+        { "type": "image_picker", "id": "image", "label": "Thumb image" },
         { "type": "url", "id": "link", "label": "Link" }
       ]
     },
@@ -95,8 +192,9 @@
       "name": "Learning skill",
       "settings": [
         { "type": "text", "id": "label", "label": "Label", "default": "STEM" },
-        { "type": "text", "id": "emoji", "label": "Emoji", "default": "🧪" },
-        { "type": "color", "id": "bg_color", "label": "Background", "default": "#E3F0FF" },
+        { "type": "image_picker", "id": "image", "label": "Thumb image" },
+        { "type": "text", "id": "emoji", "label": "Emoji fallback (if no image)", "default": "🧪" },
+        { "type": "color", "id": "bg_color", "label": "Thumb background", "default": "#FFFFFF" },
         { "type": "url", "id": "link", "label": "Link" }
       ]
     }
@@ -110,11 +208,11 @@
         { "type": "age", "settings": { "label": "6-8 Years", "emoji": "🚗" } },
         { "type": "age", "settings": { "label": "9-12 Years", "emoji": "🎮" } },
         { "type": "age", "settings": { "label": "12+ Years", "emoji": "🚴" } },
-        { "type": "skill", "settings": { "label": "STEM", "emoji": "🧪", "bg_color": "#E3F0FF" } },
-        { "type": "skill", "settings": { "label": "Creativity", "emoji": "🎨", "bg_color": "#FFE9D6" } },
-        { "type": "skill", "settings": { "label": "Logic", "emoji": "🧩", "bg_color": "#E9E3FF" } },
-        { "type": "skill", "settings": { "label": "Motor Skills", "emoji": "🏃", "bg_color": "#E3FFE9" } },
-        { "type": "skill", "settings": { "label": "Montessori", "emoji": "🔺", "bg_color": "#FFF3D6" } }
+        { "type": "skill", "settings": { "label": "STEM", "emoji": "🧪", "bg_color": "#FFFFFF" } },
+        { "type": "skill", "settings": { "label": "Creativity", "emoji": "🎨", "bg_color": "#FFFFFF" } },
+        { "type": "skill", "settings": { "label": "Logic", "emoji": "🧩", "bg_color": "#FFFFFF" } },
+        { "type": "skill", "settings": { "label": "Motor Skills", "emoji": "🏃", "bg_color": "#FFFFFF" } },
+        { "type": "skill", "settings": { "label": "Montessori", "emoji": "🔺", "bg_color": "#FFFFFF" } }
       ]
     }
   ]
