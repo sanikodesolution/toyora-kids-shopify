@@ -1,6 +1,49 @@
 {{ 'product.css' | asset_url | stylesheet_tag }}
 {{ 'toyora-theme.css' | asset_url | stylesheet_tag }}
 {{ 'toyora-pdp.css' | asset_url | stylesheet_tag }}
+{%- style -%}
+  .toyora-pdp-price .m-price {
+    display: flex !important;
+    align-items: center !important;
+    flex-wrap: wrap !important;
+    gap: 10px 12px !important;
+  }
+  .toyora-pdp-price .m-price__sale {
+    display: flex !important;
+    flex-direction: row !important;
+    flex-wrap: nowrap !important;
+    align-items: center !important;
+    gap: 10px !important;
+  }
+  .toyora-pdp-price__current {
+    color: #e91e63 !important;
+    font-size: 32px !important;
+    font-weight: 800 !important;
+    line-height: 1.1 !important;
+  }
+  .toyora-pdp-price__was {
+    color: #9ca3af !important;
+    font-size: 18px !important;
+    font-weight: 400 !important;
+    text-decoration: line-through !important;
+  }
+  .toyora-pdp-price__off {
+    background: #fce7f3 !important;
+    background-image: none !important;
+    color: #e91e63 !important;
+    border-radius: 8px !important;
+    padding: 4px 8px !important;
+    font-size: 12px !important;
+    font-weight: 800 !important;
+    letter-spacing: 0.02em !important;
+    box-shadow: none !important;
+    line-height: 1.2 !important;
+  }
+  @media screen and (max-width: 749px) {
+    .toyora-pdp-price__current { font-size: 26px !important; }
+    .toyora-pdp-price__was { font-size: 16px !important; }
+  }
+{%- endstyle -%}
 {% if section.settings.show_zoom_button %}
   {{ 'photoswipe.css' | asset_url | stylesheet_tag }}
   {{ 'component-photoswipe.css' | asset_url | stylesheet_tag }}
