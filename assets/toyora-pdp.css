@@ -770,6 +770,59 @@
 .toyora-pdtabs__more.is-open svg {
   transform: rotate(180deg);
 }
+.toyora-faq {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+.toyora-faq__item {
+  border-bottom: 1px solid #ececef;
+}
+.toyora-faq__item:last-child {
+  border-bottom: 0;
+}
+.toyora-faq__q {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  width: 100%;
+  padding: 14px 0;
+  border: 0;
+  background: none;
+  text-align: left;
+  color: #1a1a37;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+}
+.toyora-faq__icon {
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+  color: #ff1f6d;
+  transition: transform 0.2s ease;
+}
+.toyora-faq__item.is-open .toyora-faq__icon {
+  transform: rotate(180deg);
+}
+.toyora-faq__a {
+  display: none;
+  padding: 0 0 14px;
+  color: #3d3a4a;
+  font-size: 14px;
+  line-height: 1.7;
+  font-weight: 400;
+}
+.toyora-faq__item.is-open .toyora-faq__a {
+  display: block;
+}
+.toyora-faq__a p {
+  margin: 0 0 0.6em;
+}
+.toyora-faq__a p:last-child {
+  margin-bottom: 0;
+}
 @media screen and (max-width: 749px) {
   .toyora-pdtabs__tab.m-tab-header {
     flex-direction: column;

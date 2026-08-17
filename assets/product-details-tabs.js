@@ -13,6 +13,14 @@ if (!customElements.get("m-product-details-tabs")) {
           if (label) label.textContent = open ? "Read Less" : "Read More";
         });
       });
+      this.querySelectorAll("[data-toyora-faq]").forEach((btn) => {
+        btn.addEventListener("click", function () {
+          const item = this.closest(".toyora-faq__item");
+          if (!item) return;
+          const open = item.classList.toggle("is-open");
+          this.setAttribute("aria-expanded", open ? "true" : "false");
+        });
+      });
 
       if (Shopify.designMode) {
         document.addEventListener("shopify:block:select", (event) => {
