@@ -122,9 +122,11 @@ if (!customElements.get("media-gallery-mobile")) {
           pagination: { el: sliderPagination, clickable: true, type: "bullets" },
           ...thumbs,
           on: {
-            init: () => {
+            init: (swiper) => {
               slider.style.opacity = 1;
               this.domNodes = queryDomNodes(this.selectors, this.container);
+              const currentEl = this.querySelector("[data-media-current]");
+              if (currentEl) currentEl.textContent = (swiper.realIndex || initialSlide) + 1;
             },
           },
         };
@@ -142,6 +144,8 @@ if (!customElements.get("media-gallery-mobile")) {
 
         this.slider.on("slideChange", (swiper) => {
           window.pauseAllMedia(this);
+          const currentEl = this.querySelector("[data-media-current]");
+          if (currentEl) currentEl.textContent = (swiper.realIndex || 0) + 1;
           try {
             const { slides, activeIndex } = swiper;
             if (slides[activeIndex]) this.playActiveMedia(slides[activeIndex]);

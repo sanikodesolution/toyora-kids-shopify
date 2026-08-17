@@ -76,6 +76,15 @@
       {% endif %}
     >
       <div class="m-product-media--slider__images">
+        {%- if product.compare_at_price > product.price -%}
+          {%- assign rec_off = product.compare_at_price | minus: product.price | times: 100 | divided_by: product.compare_at_price -%}
+          <span class="toyora-pdp-media-sale">{{ rec_off }}% OFF</span>
+        {%- endif -%}
+        {%- if product.media.size > 1 -%}
+          <span class="toyora-pdp-media-count" aria-hidden="true">
+            <span data-media-current>1</span>/{{ product.media.size }}
+          </span>
+        {%- endif -%}
         <div class="{{ swiperContainer }}">
           <div class="swiper-wrapper">
             {% for media in product.media %}
@@ -118,6 +127,9 @@
           {% endif %}
         </div>
       </div>
+      {% if show_pagination and product.media.size > 1 %}
+        <div class="swiper-pagination"></div>
+      {% endif %}
       {% if show_thumbnails and product.media.size > 1 %}
         <div class="m-product-media--slider__thumbnails">
           <div class="nav-swiper-container">
@@ -135,6 +147,9 @@
                     media_layout: media_layout,
                     product: product
                   %}
+                  {% if forloop.index == 5 and product.media.size > 5 %}
+                    <span class="toyora-pdp-thumb-more">+{{ product.media.size | minus: 4 }}</span>
+                  {% endif %}
                   {% if media.media_type contains 'video' %}
                     <div class="m-product-media--slider__thumbnail-icon">
                       <svg
@@ -166,9 +181,6 @@
             </div>
           </div>
         </div>
-      {% endif %}
-      {% if show_pagination and product.media.size > 1 %}
-        <div class="swiper-pagination"></div>
       {% endif %}
     </div>
   </media-gallery-mobile>

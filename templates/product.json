@@ -4,7 +4,7 @@
       "type": "breadcrumb",
       "settings": {
         "container": "container",
-        "text_alignment": "center",
+        "text_alignment": "left",
         "hide_current": false,
         "hide_on_mb": false,
         "animations": "inherit"
@@ -103,7 +103,7 @@
         "show_featured_media": true,
         "show_zoom_button": true,
         "enable_video_autoplay": true,
-        "show_nav_media_mobile": false,
+        "show_nav_media_mobile": true,
         "show_pagination_mobile": true,
         "use_sticky_atc": true,
         "use_sticky_atc_on_mobile": true,

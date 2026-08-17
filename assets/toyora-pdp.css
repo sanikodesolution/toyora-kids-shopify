@@ -315,6 +315,139 @@
   .toyora-pdp-delivery__dates {
     font-size: 18px;
   }
+
+  .template-product .toyora-pdp-meta {
+    padding-bottom: 14px;
+    margin-bottom: 16px;
+    border-bottom: 1px solid #ececef;
+  }
+
+  .toyora-pdp-features {
+    gap: 14px 12px;
+  }
+
+  .toyora-pdp-features__label,
+  .toyora-pdp-features__label strong {
+    color: #1a1a37;
+    font-weight: 700;
+    font-size: 13px;
+  }
+
+  .template-product .m-product-media--mobile {
+    position: relative;
+  }
+
+  .template-product .m-product-media--mobile .m-product-media--slider__images {
+    position: relative;
+    border-radius: 0;
+    overflow: hidden;
+  }
+
+  .template-product .m-product-media--mobile .m-product-media--zoom-icon {
+    display: none;
+  }
+
+  .toyora-pdp-media-sale {
+    position: absolute;
+    top: 12px;
+    left: 12px;
+    z-index: 4;
+    background: #f42361;
+    color: #fff;
+    border-radius: 8px;
+    padding: 5px 9px;
+    font-size: 12px;
+    font-weight: 800;
+    letter-spacing: 0.02em;
+    line-height: 1.2;
+  }
+
+  .toyora-pdp-media-count {
+    position: absolute;
+    left: 12px;
+    bottom: 12px;
+    z-index: 4;
+    background: rgba(26, 26, 55, 0.72);
+    color: #fff;
+    border-radius: 999px;
+    padding: 4px 10px;
+    font-size: 12px;
+    font-weight: 700;
+    line-height: 1.2;
+  }
+
+  .template-product .m-product-media--mobile .m-product-media--slider__navigation {
+    position: absolute;
+    inset: 0;
+    z-index: 3;
+    pointer-events: none;
+  }
+
+  .template-product .m-product-media--mobile .swiper-button-control {
+    pointer-events: auto;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: #fff;
+    border: 0;
+    box-shadow: 0 4px 14px rgba(26, 26, 55, 0.12);
+    color: #1a1a37;
+  }
+
+  .template-product .m-product-media--mobile .swiper-button-prev {
+    left: 10px;
+  }
+
+  .template-product .m-product-media--mobile .swiper-button-next {
+    right: 10px;
+  }
+
+  .template-product .m-product-media--mobile__atwl-button {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    z-index: 5;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: #fff;
+    box-shadow: 0 4px 14px rgba(26, 26, 55, 0.12);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #f42361;
+  }
+
+  .template-product .m-product-media--mobile .swiper-pagination {
+    position: static;
+    margin: 10px 0 4px;
+    display: flex;
+    justify-content: center;
+    gap: 6px;
+  }
+
+  .template-product .m-product-media--mobile .swiper-pagination-bullet {
+    width: 8px;
+    height: 8px;
+    background: #d1d5db;
+    opacity: 1;
+  }
+
+  .template-product .m-product-media--mobile .swiper-pagination-bullet-active {
+    background: #f42361;
+  }
+
+  .template-product .m-product-media--mobile .m-product-media--slider__thumbnails .swiper-slide {
+    width: 58px !important;
+    height: 58px !important;
+    border-radius: 10px;
+    border-color: #ececef;
+  }
+
+  .template-product .m-product-media--mobile .m-product-media--slider__thumbnails .swiper-slide-thumb-active,
+  .template-product .m-product-media--mobile .m-product-media--slider__thumbnails .swiper-slide-active {
+    border-color: #f42361;
+  }
 }
 
 /* Trust row — screenshot match */
