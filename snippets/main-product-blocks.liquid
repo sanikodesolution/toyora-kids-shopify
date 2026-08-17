@@ -108,7 +108,7 @@
           <div class="toyora-pdp-rating__fallback"{% if app_badge != blank %} hidden{% endif %}>
             <span class="toyora-pdp-rating__stars" aria-hidden="true">
               {%- for i in (1..5) -%}
-                <svg viewBox="0 0 20 20"><path fill="{% if i <= full_stars %}#F5B301{% else %}#E5E7EB{% endif %}" d="M10 1.5l2.47 5.01 5.53.8-4 3.9.94 5.5L10 14.1l-4.94 2.61.94-5.5-4-3.9 5.53-.8L10 1.5z"/></svg>
+                <svg viewBox="0 0 20 20"><path fill="{% if i <= full_stars %}#FFB800{% else %}#E5E7EB{% endif %}" d="M10 1.5l2.47 5.01 5.53.8-4 3.9.94 5.5L10 14.1l-4.94 2.61.94-5.5-4-3.9 5.53-.8L10 1.5z"/></svg>
               {%- endfor -%}
             </span>
             {%- if rating_count > 0 -%}
@@ -119,11 +119,12 @@
           </div>
         </div>
       {%- when 'price' -%}
-        <div class="product-block-group--price">
+        <div class="product-block-group--price toyora-pdp-price">
           {% render 'product-prices',
             use_variant: true,
             product: product,
             show_sale_badge: true,
+            sale_badge_format: 'percent_off',
             price_text_size: 'm:text-xl md:m:text-2xl',
             sale_badge_type: block.settings.sale_badge_type | default: 'percentage'
           %}
@@ -146,7 +147,7 @@
               data-availability
             >
               {%- if selected_variant.available -%}
-                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><circle cx="8" cy="8" r="8" fill="#22a45a"/><path d="M4.8 8.2 7 10.3 11.3 5.8" stroke="#fff" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><circle cx="8" cy="8" r="8" fill="#22c55e"/><path d="M4.8 8.2 7 10.3 11.3 5.8" stroke="#fff" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
                 {{- 'products.product.in_stock' | t -}}
               {%- else -%}
                 {% render 'new-locale', key: 'products.product.out_of_stock' %}
@@ -167,7 +168,7 @@
           assign f6 = section.settings.pdp_feature_6 | default: 'Durable & Shockproof'
           assign f7 = section.settings.pdp_feature_7 | default: 'High Speed'
           assign f8 = section.settings.pdp_feature_8
-          assign colors = 'blue,green,purple,pink,blue,orange,green,purple' | split: ','
+          assign colors = 'purple,green,purple,pink,blue,orange,red,purple' | split: ','
           assign feature_blob = f1 | append: '||' | append: f2 | append: '||' | append: f3 | append: '||' | append: f4 | append: '||' | append: f5 | append: '||' | append: f6 | append: '||' | append: f7 | append: '||' | append: f8
           assign feature_list = feature_blob | split: '||'
         %}
@@ -242,7 +243,7 @@
                 data-availability
               >
                 {%- if selected_variant.available -%}
-                  <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><circle cx="8" cy="8" r="8" fill="#22a45a"/><path d="M4.8 8.2 7 10.3 11.3 5.8" stroke="#fff" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                  <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><circle cx="8" cy="8" r="8" fill="#22c55e"/><path d="M4.8 8.2 7 10.3 11.3 5.8" stroke="#fff" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
                   {{- 'products.product.in_stock' | t -}}
                 {%- else -%}
                   {% render 'new-locale', key: 'products.product.out_of_stock' %}
@@ -833,54 +834,31 @@
           </div>
         {% endif %}
       {%- when 'shipping' -%}
-        {% comment %} Estimated delivery widget removed per PDP mockup {% endcomment %}
-        <ul class="m-product-shipping m:hidden">
-          {% if block.settings.show_delivery_times %}
-            <li class="m-product-shipping--item m:display-flex m:items-center">
-              <span class="m-product-shipping--icon">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path d="M16.5 7.50087H20.4938C20.6432 7.4999 20.7894 7.54415 20.9132 7.62781C21.037 7.71147 21.1326 7.83062 21.1875 7.96962L22.5 11.2509" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                  <path d="M1.5 13.5009H16.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                  <path d="M17.625 20.2509C18.8676 20.2509 19.875 19.2435 19.875 18.0009C19.875 16.7582 18.8676 15.7509 17.625 15.7509C16.3824 15.7509 15.375 16.7582 15.375 18.0009C15.375 19.2435 16.3824 20.2509 17.625 20.2509Z" stroke="currentColor" stroke-width="1.5" stroke-miterlimit="10"/>
-                  <path d="M6.375 20.2509C7.61764 20.2509 8.625 19.2435 8.625 18.0009C8.625 16.7582 7.61764 15.7509 6.375 15.7509C5.13236 15.7509 4.125 16.7582 4.125 18.0009C4.125 19.2435 5.13236 20.2509 6.375 20.2509Z" stroke="currentColor" stroke-width="1.5" stroke-miterlimit="10"/>
-                  <path d="M15.375 18.0009H8.625" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                  <path d="M4.125 18.0009H2.25C2.05109 18.0009 1.86032 17.9218 1.71967 17.7812C1.57902 17.6405 1.5 17.4498 1.5 17.2509V6.75085C1.5 6.55194 1.57902 6.36118 1.71967 6.22052C1.86032 6.07987 2.05109 6.00085 2.25 6.00085H16.5V16.0509" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                  <path d="M16.5 11.2509H22.5V17.2509C22.5 17.4498 22.421 17.6405 22.2803 17.7812C22.1397 17.9218 21.9489 18.0009 21.75 18.0009H19.875" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                </svg>
-              </span>
-              {% liquid
-                assign range = 2 | times: 24 | times: 60 | times: 60
-                assign deliver_in = block.settings.deliver_days | times: 24 | times: 60 | times: 60
-                assign date_format = block.settings.date_format | default: '%b %d'
-                assign now = 'now' | date: '%s'
-
-                assign from = now | plus: deliver_in | minus: range | date: date_format
-                assign to = now | plus: deliver_in | plus: range | date: date_format
-              %}
-              <div class="m-product-shipping--content m:display-flex">
-                <p>
-                  <strong>{{ block.settings.deliver_text | strip_html }}</strong
-                  ><span class="m-product-shipping--content__value">{{ from }} - {{ to }}</span>
-                </p>
-              </div>
-            </li>
-          {% endif %}
-          {% if block.settings.show_shipping_text and block.settings.shipping_text != blank %}
-            <li class="m-product-shipping--item m-product-shipping--text m:display-flex m:items-center">
-              <span class="m-product-shipping--icon">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path d="M21 16.6231V7.37934C20.9993 7.24582 20.9634 7.11484 20.8959 6.99963C20.8284 6.88441 20.7317 6.78903 20.6156 6.72309L12.3656 2.08247C12.2545 2.01829 12.1284 1.9845 12 1.9845C11.8716 1.9845 11.7455 2.01829 11.6344 2.08247L3.38437 6.72309C3.26827 6.78903 3.1716 6.88441 3.10411 6.99963C3.03663 7.11484 3.00072 7.24582 3 7.37934V16.6231C3.00072 16.7566 3.03663 16.8876 3.10411 17.0028C3.1716 17.118 3.26827 17.2134 3.38437 17.2793L11.6344 21.92C11.7455 21.9841 11.8716 22.0179 12 22.0179C12.1284 22.0179 12.2545 21.9841 12.3656 21.92L20.6156 17.2793C20.7317 17.2134 20.8284 17.118 20.8959 17.0028C20.9634 16.8876 20.9993 16.7566 21 16.6231Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                  <path d="M16.5938 14.2977V9.42273L7.5 4.4071" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                  <path d="M20.8963 6.99426L12.0838 12.0005L3.10254 6.99426" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                  <path d="M12.0844 12.0009L12 22.0134" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                </svg>
-              </span>
-              <div class="m-product-shipping--content m:display-flex rte">
-                {{ block.settings.shipping_text }}
-              </div>
-            </li>
-          {% endif %}
-        </ul>
+        {%- if block.settings.show_delivery_times -%}
+          {%- liquid
+            assign range = 2 | times: 24 | times: 60 | times: 60
+            assign deliver_in = block.settings.deliver_days | times: 24 | times: 60 | times: 60
+            assign now = 'now' | date: '%s'
+            assign from_day = now | plus: deliver_in | minus: range | date: '%d'
+            assign to_full = now | plus: deliver_in | plus: range | date: '%d %b, %Y'
+            assign delivery_label = block.settings.deliver_text | strip_html | replace: ':', ''
+          -%}
+          <div class="toyora-pdp-delivery">
+            <div class="toyora-pdp-delivery__head">
+              <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <rect x="3.5" y="5" width="17" height="16" rx="3" stroke="currentColor" stroke-width="1.8"/>
+                <path d="M3.5 10h17" stroke="currentColor" stroke-width="1.8"/>
+                <path d="M8 3.5v3.5M16 3.5v3.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+              </svg>
+              <span>{{ delivery_label }}</span>
+            </div>
+            <div class="toyora-pdp-delivery__dates">{{ from_day }} - {{ to_full }}</div>
+            <div class="toyora-pdp-delivery__meta">
+              <span>Inside Dhaka: 2-3 Days</span>
+              <span>Outside Dhaka: 3-5 Days</span>
+            </div>
+          </div>
+        {%- endif -%}
       {%- when 'complementary' -%}
         {{ 'component-product-card.css' | asset_url | stylesheet_tag }}
         {{ 'product-complementary.css' | asset_url | stylesheet_tag }}

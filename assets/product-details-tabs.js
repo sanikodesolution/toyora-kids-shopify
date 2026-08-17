@@ -4,12 +4,12 @@ if (!customElements.get("m-product-details-tabs")) {
       super();
       this.tabs = new MinimogTheme.Tabs(this);
       this.querySelectorAll("[data-toyora-readmore]").forEach((btn) => {
-        btn.addEventListener("click", () => {
-          const wrap = btn.closest(".m-tab-content__inner").querySelector("[data-toyora-desc]");
-          if (!wrap) return;
-          const open = wrap.classList.toggle("is-expanded");
-          btn.classList.toggle("is-open", open);
-          const label = btn.querySelector("span");
+        btn.addEventListener("click", function () {
+          const desc = this.closest(".m-tab-content__inner").querySelector("[data-toyora-desc]");
+          if (!desc) return;
+          const open = desc.classList.toggle("is-expanded");
+          this.classList.toggle("is-open", open);
+          const label = this.querySelector("span");
           if (label) label.textContent = open ? "Read Less" : "Read More";
         });
       });

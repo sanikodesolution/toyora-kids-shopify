@@ -88,31 +88,58 @@
             <div class="m-tab-content__inner">
               {% case block.type %}
                 {% when 'description' %}
-                  <div class="toyora-pdtabs__desc" data-toyora-desc>
-                    <div class="rte toyora-pdtabs__desc-inner">
-                      {%- assign description = product.description -%}
-                      {{ description }}
+                  {%- liquid
+                    assign tab_html = block.settings.content
+                    if tab_html == blank
+                      assign tab_html = product.description
+                    endif
+                  -%}
+                  <div class="toyora-pdtabs__body">
+                    <div class="toyora-pdtabs__desc" data-toyora-desc>
+                      <div class="rte toyora-pdtabs__desc-inner">
+                        {{ tab_html }}
+                      </div>
                     </div>
+                    <button type="button" class="toyora-pdtabs__more" data-toyora-readmore>
+                      <span>Read More</span>
+                      <svg viewBox="0 0 16 16" fill="none"><path d="M4 6.5 8 10.5 12 6.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                    </button>
                   </div>
-                  <button type="button" class="toyora-pdtabs__more" data-toyora-readmore>
-                    <span>Read More</span>
-                    <svg viewBox="0 0 16 16" fill="none"><path d="M4 6.5 8 10.5 12 6.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                  </button>
                 {% when 'reviews' %}
                   <div class="{{ block.settings.container | default: 'container' }}">
                     {% render 'product-reviews-app__snippet', custom_liquid: block.settings.custom_liquid %}
                   </div>
                 {% when 'tab' %}
-                  <div class="rte">
-                    {{ block.settings.content }}
-                    {{ block.settings.content_page.content }}
+                  <div class="toyora-pdtabs__body">
+                    <div class="toyora-pdtabs__desc" data-toyora-desc>
+                      <div class="rte toyora-pdtabs__desc-inner">
+                        {{ block.settings.content }}
+                        {{ block.settings.content_page.content }}
+                      </div>
+                    </div>
+                    <button type="button" class="toyora-pdtabs__more" data-toyora-readmore>
+                      <span>Read More</span>
+                      <svg viewBox="0 0 16 16" fill="none"><path d="M4 6.5 8 10.5 12 6.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                    </button>
                   </div>
                 {% when 'faq' %}
-                  <div class="rte">
-                    {{ block.settings.content }}
+                  <div class="toyora-pdtabs__body">
+                    <div class="toyora-pdtabs__desc" data-toyora-desc>
+                      <div class="rte toyora-pdtabs__desc-inner">
+                        {{ block.settings.content }}
+                      </div>
+                    </div>
+                    <button type="button" class="toyora-pdtabs__more" data-toyora-readmore>
+                      <span>Read More</span>
+                      <svg viewBox="0 0 16 16" fill="none"><path d="M4 6.5 8 10.5 12 6.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                    </button>
                   </div>
                 {% when 'liquid' %}
-                  {{ block.settings.custom_liquid }}
+                  <div class="toyora-pdtabs__body">
+                    <div class="rte toyora-pdtabs__desc-inner">
+                      {{ block.settings.custom_liquid }}
+                    </div>
+                  </div>
                 {% else %}
 
               {% endcase %}
@@ -244,6 +271,12 @@
           "id": "header",
           "label": "Tab header",
           "default": "Description"
+        },
+        {
+          "type": "richtext",
+          "id": "content",
+          "label": "Tab content",
+          "info": "Leave blank to use the product description from the product editor."
         }
       ]
     },

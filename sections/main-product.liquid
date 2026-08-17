@@ -82,7 +82,7 @@
         <div class="m-product-media--mobile m-product-media--{{ section.settings.layout }} md:m:hidden">
           {%- render 'product-media-mobile',
             show_nav: false,
-            show_thumbnails: true,
+            show_thumbnails: section.settings.show_nav_media_mobile,
             show_pagination: section.settings.show_pagination_mobile,
             section: section
           -%}
@@ -146,10 +146,16 @@
         {{ product | json }}
       </script>
     </div>
-    <div class="toyora-pdp-trust toyora-pdp-trust--full">
+    <div class="toyora-pdp-trust toyora-pdp-trust--full" aria-label="Store benefits">
       <div class="toyora-pdp-trust__item">
-        <span class="toyora-pdp-trust__icon toyora-pdp-trust__icon--purple">
-          <svg viewBox="0 0 24 24" fill="none"><path d="M3 7h11v9H3V7z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/><path d="M14 10h4l3 3v3h-7v-6z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/><circle cx="7" cy="18.5" r="1.6" fill="currentColor"/><circle cx="17.5" cy="18.5" r="1.6" fill="currentColor"/></svg>
+        <span class="toyora-pdp-trust__icon toyora-pdp-trust__icon--purple" aria-hidden="true">
+          <svg viewBox="0 0 32 32" fill="none">
+            <path d="M2 10h2.4M2 14h2.4M2 18h2.4" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"/>
+            <path d="M7 8.5h12.2v12H7v-12z" stroke="currentColor" stroke-width="1.9" stroke-linejoin="round"/>
+            <path d="M19.2 13h5.1L27.5 17v3.5H19.2V13z" stroke="currentColor" stroke-width="1.9" stroke-linejoin="round"/>
+            <circle cx="11.2" cy="23.4" r="2.1" stroke="currentColor" stroke-width="1.9"/>
+            <circle cx="23.4" cy="23.4" r="2.1" stroke="currentColor" stroke-width="1.9"/>
+          </svg>
         </span>
         <span class="toyora-pdp-trust__copy">
           <strong class="toyora-pdp-trust__title">Free Delivery</strong>
@@ -157,8 +163,11 @@
         </span>
       </div>
       <div class="toyora-pdp-trust__item">
-        <span class="toyora-pdp-trust__icon toyora-pdp-trust__icon--purple">
-          <svg viewBox="0 0 24 24" fill="none"><path d="M4 12a8 8 0 0 1 13.7-5.7L20 8" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/><path d="M20 4v4h-4" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/><path d="M20 12a8 8 0 0 1-13.7 5.7L4 16" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/><path d="M4 20v-4h4" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>
+        <span class="toyora-pdp-trust__icon toyora-pdp-trust__icon--purple" aria-hidden="true">
+          <svg viewBox="0 0 32 32" fill="none">
+            <path d="M10.2 9.2A9 9 0 1 1 7.4 16.4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            <path d="M10.2 4.8v6.4h6.4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
         </span>
         <span class="toyora-pdp-trust__copy">
           <strong class="toyora-pdp-trust__title">Easy Return</strong>
@@ -166,8 +175,11 @@
         </span>
       </div>
       <div class="toyora-pdp-trust__item">
-        <span class="toyora-pdp-trust__icon toyora-pdp-trust__icon--green">
-          <svg viewBox="0 0 24 24" fill="none"><path d="M12 3 5 6v5.5c0 4.2 2.8 7.3 7 9.2 4.2-1.9 7-5 7-9.2V6l-7-3z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/><path d="M9 12.2 11 14l4-4.2" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <span class="toyora-pdp-trust__icon toyora-pdp-trust__icon--green" aria-hidden="true">
+          <svg viewBox="0 0 32 32" fill="none">
+            <path fill="currentColor" d="M16 3.4 6.2 7.5v7.4c0 6.2 4.1 10.9 9.8 13.5 5.7-2.6 9.8-7.3 9.8-13.5V7.5L16 3.4z"/>
+            <path d="M11.6 16.3 14.5 19.2 20.6 13" stroke="#fff" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
         </span>
         <span class="toyora-pdp-trust__copy">
           <strong class="toyora-pdp-trust__title">Safe For Kids</strong>
@@ -175,8 +187,13 @@
         </span>
       </div>
       <div class="toyora-pdp-trust__item">
-        <span class="toyora-pdp-trust__icon toyora-pdp-trust__icon--red">
-          <svg viewBox="0 0 24 24" fill="none"><rect x="3.5" y="6" width="17" height="12" rx="2" stroke="currentColor" stroke-width="1.7"/><path d="M3.5 10h17" stroke="currentColor" stroke-width="1.7"/><path d="M8 15h4" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>
+        <span class="toyora-pdp-trust__icon toyora-pdp-trust__icon--red" aria-hidden="true">
+          <svg viewBox="0 0 32 32" fill="none">
+            <rect x="10.5" y="4.2" width="11" height="6.2" rx="1.3" stroke="currentColor" stroke-width="1.9"/>
+            <rect x="4.4" y="9.2" width="23.2" height="16.4" rx="3.2" stroke="currentColor" stroke-width="1.9"/>
+            <path d="M4.4 14.4h23.2" stroke="currentColor" stroke-width="1.9"/>
+            <circle cx="22.6" cy="20.8" r="1.7" fill="currentColor"/>
+          </svg>
         </span>
         <span class="toyora-pdp-trust__copy">
           <strong class="toyora-pdp-trust__title">Cash On Delivery</strong>

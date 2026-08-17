@@ -28,6 +28,7 @@
   endif
 
   assign sale_badge_type = sale_badge_type | default: 'percentage'
+  assign sale_badge_format = sale_badge_format | default: 'save'
 -%}
 
 <div
@@ -106,12 +107,14 @@
           endif
         %}
         <div class="m-price__badge-sale" data-type="{{ sale_badge_type }}">
-          <span class="m-product-tag m-product-tag--sale m-gradient m-color-{{ settings.sale_badge_color_scheme }}">
-            {% unless sale_badge_type == 'text' %}
+          <span class="m-product-tag m-product-tag--sale{% unless sale_badge_format == 'percent_off' %} m-gradient m-color-{{ settings.sale_badge_color_scheme }}{% endunless %}">
+            {% if sale_badge_format == 'percent_off' %}
+              {{ discount }} OFF
+            {% elsif sale_badge_type != 'text' %}
               {% render 'new-locale', key: 'products.product.save_html', param: '{{ amount }}', value: discount %}
             {% else %}
               {% render 'new-locale', key: 'products.product.sale_text' %}
-            {% endunless %}
+            {% endif %}
           </span>
         </div>
       {% endif %}
