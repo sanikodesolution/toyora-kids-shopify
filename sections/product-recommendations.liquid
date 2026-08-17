@@ -27,6 +27,11 @@
   if image_ratio == blank or image_ratio == 'original'
     assign image_ratio = '1/1'
   endif
+
+  assign show_cart_button = section.settings.show_cart_button
+  unless show_cart_button
+    assign classes = classes | append: ' toyora-recs--hide-cart'
+  endunless
 -%}
 
 {%- capture gridClass -%}
@@ -83,6 +88,7 @@
     display: flex;
     flex-direction: column;
     flex: 1 1 auto;
+    padding:0 20px 20px;
   }
 
   #m-section--{{ section.id }} .m-product-card__title {
@@ -123,228 +129,240 @@
     box-shadow: 0 0 0 0.2rem rgba(244, 35, 97, 0.25);
   }
 
+  #m-section--{{ section.id }}.toyora-recs--hide-cart .m-product-card__action-wrapper,
+  #m-section--{{ section.id }}.toyora-recs--hide-cart .m-product-card__atc-button,
+  #m-section--{{ section.id }}.toyora-recs--hide-cart .m-add-to-cart,
+  #m-section--{{ section.id }}.toyora-recs--hide-cart .m-product-card__media .m-product-card__action .m-product-form {
+    display: none !important;
+  }
+
+  #m-section--{{ section.id }} .toyora-recs__head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 16px;
+    text-align: left !important;
+  }
+
+  #m-section--{{ section.id }} .toyora-recs__head .m-section__heading {
+    margin: 0;
+  }
+
+  #m-section--{{ section.id }} .toyora-recs__viewall {
+    flex-shrink: 0;
+    color: #6c63ff;
+    font-size: 14px;
+    font-weight: 700;
+    text-decoration: none;
+    white-space: nowrap;
+  }
+
+  #m-section--{{ section.id }} .toyora-recs-list {
+    display: none;
+  }
+
   @media screen and (max-width: 1023px) {
     #m-section--{{ section.id }} .m-product-recommendations__wrapper,
-    #m-section--{{ section.id }} .m-mixed-layout--mobile-scroll {
-      overflow: visible !important;
-      margin-left: 0 !important;
-      margin-right: 0 !important;
-      padding-left: 0 !important;
-    }
-
-    #m-section--{{ section.id }} .m-product-list,
-    #m-section--{{ section.id }} .swiper-container {
-      overflow: visible !important;
-    }
-
-    #m-section--{{ section.id }} .m-mixed-layout__inner,
-    #m-section--{{ section.id }} .swiper-wrapper,
-    #m-section--{{ section.id }} .m:grid {
-      display: flex !important;
-      flex-direction: column !important;
-      flex-wrap: nowrap !important;
-      transform: none !important;
-      width: 100% !important;
-      height: auto !important;
-      margin-left: 0 !important;
-      margin-right: 0 !important;
-      gap: 12px;
-      row-gap: 12px;
-    }
-
-    #m-section--{{ section.id }} .m:column,
-    #m-section--{{ section.id }} .swiper-slide {
-      width: 100% !important;
-      max-width: 100% !important;
-      min-width: 0 !important;
-      flex: 0 0 auto !important;
-      margin: 0 !important;
-    }
-
     #m-section--{{ section.id }} .m-slider-controls {
       display: none !important;
     }
 
-    #m-section--{{ section.id }} .m-product-card {
-      flex-direction: row;
-      align-items: stretch;
-      padding: 10px;
+    #m-section--{{ section.id }} .toyora-recs-list {
+      display: flex;
+      flex-direction: column;
       gap: 12px;
-      overflow: visible;
+    }
+
+    #m-section--{{ section.id }} .toyora-recs-item {
       position: relative;
+      display: flex;
+      align-items: stretch;
+      gap: 14px;
+      padding: 12px;
+      background: #fff;
+      border: 1px solid #e5e7eb;
+      border-radius: 14px;
     }
 
-    #m-section--{{ section.id }} .m-product-card__media {
-      width: 104px;
-      flex: 0 0 104px;
-      border-radius: 8px;
+    #m-section--{{ section.id }} .toyora-recs-item__media {
+      position: relative;
+      flex: 0 0 108px;
+      width: 108px;
+      height: 108px;
+      border-radius: 10px;
       overflow: hidden;
-      align-self: center;
+      background: #fff;
     }
 
-    #m-section--{{ section.id }} .m-product-card__media [style*='--aspect-ratio'] {
-      --aspect-ratio: 1 !important;
+    #m-section--{{ section.id }} .toyora-recs-item__media img,
+    #m-section--{{ section.id }} .toyora-recs-item__placeholder {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      padding: 6px;
+      box-sizing: border-box;
+      display: block;
     }
 
-    #m-section--{{ section.id }} .m-product-card__media img {
-      padding: 4px;
-    }
-
-    #m-section--{{ section.id }} .m-product-card__hover-image,
-    #m-section--{{ section.id }} .m-product-card__media .m-product-card__action,
-    #m-section--{{ section.id }} .m-product-card__media .m-product-card__action--top,
-    #m-section--{{ section.id }} .m-product-card__description,
-    #m-section--{{ section.id }} .m-product-card__vendor,
-    #m-section--{{ section.id }} .m-product-card__inventory,
-    #m-section--{{ section.id }} .m-product-card__option,
-    #m-section--{{ section.id }} .m-product-card__countdown {
-      display: none !important;
-    }
-
-    #m-section--{{ section.id }} .m-product-card__tags {
+    #m-section--{{ section.id }} .toyora-recs-item__badge {
+      position: absolute;
       top: 6px;
       left: 6px;
+      z-index: 1;
+      padding: 3px 8px;
+      border-radius: 6px;
+      font-size: 10px;
+      font-weight: 800;
+      letter-spacing: 0.02em;
+      line-height: 1.3;
+      color: #fff;
+    }
+
+    #m-section--{{ section.id }} .toyora-recs-item__badge--pink {
+      background: #f42361;
+    }
+
+    #m-section--{{ section.id }} .toyora-recs-item__badge--orange {
+      background: #ff8a3d;
+    }
+
+    #m-section--{{ section.id }} .toyora-recs-item__info {
+      flex: 1 1 auto;
+      min-width: 0;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 2px 40px 2px 0;
       gap: 4px;
     }
 
-    #m-section--{{ section.id }} .m-product-card__content {
-      flex: 1 1 auto;
-      min-width: 0;
-      padding: 2px 44px 2px 0 !important;
-      text-align: left !important;
-      justify-content: center;
-    }
-
-    #m-section--{{ section.id }} .m-product-card__title {
-      min-height: 0;
-      margin-bottom: 4px;
-      font-size: 15px;
+    #m-section--{{ section.id }} .toyora-recs-item__title {
+      display: block;
+      color: #1a1a37;
+      font-size: 16px;
+      font-weight: 800;
       line-height: 1.3;
-      font-weight: 700;
+      text-decoration: none;
     }
 
-    #m-section--{{ section.id }} .m-product-card__reviews {
-      margin-bottom: 4px;
+    #m-section--{{ section.id }} .toyora-recs-item:hover .toyora-recs-item__title,
+    #m-section--{{ section.id }} .toyora-recs-item__title:hover {
+      color: #f42361;
     }
 
-    #m-section--{{ section.id }} .m-product-card__content-footer {
-      display: flex !important;
-      flex-direction: column;
-      justify-content: space-between;
-      align-items: flex-end;
-      position: absolute;
-      top: 8px;
-      right: 8px;
-      bottom: 8px;
-      margin: 0;
-      width: auto;
-      pointer-events: none;
-      z-index: 3;
-    }
-
-    #m-section--{{ section.id }} .m-product-card__content-footer .m-product-card__action {
+    #m-section--{{ section.id }} .toyora-recs-item__rating {
       display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      align-items: flex-end;
-      position: static;
-      opacity: 1;
-      transform: none;
+      align-items: center;
+      gap: 4px;
+      color: #6b7280;
+      font-size: 13px;
+      font-weight: 600;
+    }
+
+    #m-section--{{ section.id }} .toyora-recs-item__rating svg {
+      color: #ffb800;
+      flex-shrink: 0;
+    }
+
+    #m-section--{{ section.id }} .toyora-recs-item__count {
+      font-weight: 500;
+      color: #9ca3af;
+    }
+
+    #m-section--{{ section.id }} .toyora-recs-item__price {
+      display: flex;
+      align-items: baseline;
       gap: 8px;
-      left: auto;
-      right: auto;
-      bottom: auto;
-      height: 100%;
-      pointer-events: none;
+      color: #1a1a37;
+      font-size: 16px;
+      font-weight: 800;
     }
 
-    #m-section--{{ section.id }} .m-product-card__content-footer .m-product-card__action-icons {
-      display: flex;
-      order: -1;
-      pointer-events: auto;
+    #m-section--{{ section.id }} .toyora-recs-item__price--sale {
+      color: #f42361;
     }
 
-    #m-section--{{ section.id }} .m-product-card__content-footer .m-product-card__atc-button,
-    #m-section--{{ section.id }} .m-product-card__content-footer .m-compare-button,
-    #m-section--{{ section.id }} .m-product-card__content-footer .m-product-quickview-button,
-    #m-section--{{ section.id }} .m-product-card__content-footer .m-tooltip__content {
-      display: none !important;
+    #m-section--{{ section.id }} .toyora-recs-item__price s {
+      color: #9ca3af;
+      font-size: 13px;
+      font-weight: 500;
     }
 
-    #m-section--{{ section.id }} .m-product-card__content-footer .m-wishlist-button {
-      width: 28px;
-      height: 28px;
+    #m-section--{{ section.id }} .toyora-recs-item__wish {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      width: 32px;
+      height: 32px;
+      padding: 0;
       border: 0;
       background: transparent;
       color: #9ca3af;
-      box-shadow: none;
-      pointer-events: auto;
+      cursor: pointer;
     }
 
-    #m-section--{{ section.id }} .m-product-card__content-footer .m-wishlist-button svg {
-      width: 18px;
-      height: 18px;
+    #m-section--{{ section.id }} .toyora-recs-item__wish.is-active,
+    #m-section--{{ section.id }} .toyora-recs-item__wish:hover {
+      color: #f42361;
     }
 
-    #m-section--{{ section.id }} .m-product-card__content-footer .m-product-card__action-wrapper,
-    #m-section--{{ section.id }} .m-product-card__content-footer .m-product-form,
-    #m-section--{{ section.id }} .m-product-card__content-footer .product-card-form {
-      width: auto !important;
-      margin: 0;
-      pointer-events: auto;
+    #m-section--{{ section.id }} .toyora-recs-item__wish.is-active path {
+      fill: currentColor;
     }
 
-    #m-section--{{ section.id }} .m-product-card__content-footer .m-button {
-      width: 40px !important;
+    #m-section--{{ section.id }} .toyora-recs-item__cart {
+      position: absolute;
+      right: 10px;
+      bottom: 10px;
+      width: 40px;
       height: 40px;
-      min-width: 40px;
       padding: 0;
-      border-radius: 50%;
       border: 0;
-      background: #f42361 !important;
-      color: #fff !important;
-      box-shadow: 0 6px 14px rgba(244, 35, 97, 0.28);
-      font-size: 0;
-      line-height: 0;
+      border-radius: 50%;
+      background: #f42361;
+      color: #fff;
       display: inline-flex;
       align-items: center;
       justify-content: center;
+      cursor: pointer;
+      box-shadow: 0 6px 14px rgba(244, 35, 97, 0.28);
     }
 
-    #m-section--{{ section.id }} .m-product-card__content-footer .m-add-to-cart--text,
-    #m-section--{{ section.id }} .m-product-card__content-footer .m-spinner-icon {
-      display: none !important;
+    #m-section--{{ section.id }} .toyora-recs-item__cart:hover {
+      background: #dc1b54;
     }
 
-    #m-section--{{ section.id }} .m-product-card__content-footer .m-button::before {
-      content: '';
-      width: 18px;
-      height: 18px;
-      background-color: currentColor;
-      -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none'%3E%3Ccircle cx='9' cy='20' r='1.4' fill='black'/%3E%3Ccircle cx='18' cy='20' r='1.4' fill='black'/%3E%3Cpath d='M3 4h2l2.2 11.2a1.6 1.6 0 0 0 1.6 1.3h8.7a1.6 1.6 0 0 0 1.6-1.3L21.2 8H6.2' stroke='black' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center / contain no-repeat;
-      mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none'%3E%3Ccircle cx='9' cy='20' r='1.4' fill='black'/%3E%3Ccircle cx='18' cy='20' r='1.4' fill='black'/%3E%3Cpath d='M3 4h2l2.2 11.2a1.6 1.6 0 0 0 1.6 1.3h8.7a1.6 1.6 0 0 0 1.6-1.3L21.2 8H6.2' stroke='black' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center / contain no-repeat;
+    #m-section--{{ section.id }} .toyora-recs-item__cart:disabled {
+      background: #d1d5db;
+      box-shadow: none;
+      cursor: not-allowed;
     }
   }
 
   @media screen and (max-width: 767px) {
-    #m-section--{{ section.id }} .m-product-card {
-      padding: 8px;
+    #m-section--{{ section.id }} .toyora-recs__head .m-section__heading {
+      font-size: 20px;
+    }
+
+    #m-section--{{ section.id }} .toyora-recs-item {
+      padding: 10px;
       gap: 10px;
     }
 
-    #m-section--{{ section.id }} .m-product-card__media {
-      width: 88px;
-      flex-basis: 88px;
+    #m-section--{{ section.id }} .toyora-recs-item__media {
+      flex-basis: 92px;
+      width: 92px;
+      height: 92px;
     }
 
-    #m-section--{{ section.id }} .m-product-card__title {
-      font-size: 14px;
+    #m-section--{{ section.id }} .toyora-recs-item__title {
+      font-size: 15px;
     }
 
-    #m-section--{{ section.id }} .m-product-card__content-footer .m-button {
-      width: 36px !important;
+    #m-section--{{ section.id }} .toyora-recs-item__cart {
+      width: 36px;
       height: 36px;
-      min-width: 36px;
     }
   }
 {%- endstyle -%}
@@ -361,10 +379,18 @@
     {% if recommendations.performed and recommendations.products_count > 0 %}
       <div class="{{ container }} m-section-my m-section-py">
         {% assign default_heading = 'products.product.product_recommendation_heading' | t %}
-        <div class="m-section__header m:text-{{ section.settings.text_align | default: 'left' }}">
+        {% assign view_all_url = section.settings.view_all_link | default: routes.all_products_collection_url %}
+        {% assign view_all_text = section.settings.view_all_text | default: 'View All' %}
+        <div class="m-section__header toyora-recs__head">
           <h2 class="m-section__heading {{ section.settings.heading_size }}{% if animated %} m-scroll-trigger animate--{{ animation_effect }}{% endif %}">
             {{ section.settings.heading | default: default_heading }}
           </h2>
+          <a href="{{ view_all_url }}" class="toyora-recs__viewall">{{ view_all_text }} →</a>
+        </div>
+        <div class="toyora-recs-list">
+          {% for product in recommendations.products %}
+            {% render 'toyora-recs-list-item', product: product, remove_params: remove_params %}
+          {% endfor %}
         </div>
         <div class="m-product-recommendations__wrapper m-slider-control-hover-inside m-mixed-layout{% if section.settings.use_scroll_mobile %} m-mixed-layout--mobile-scroll{% endif %}">
           <div class="m-product-list {% if section.settings.enable_slider %} swiper-container{% endif %}">
@@ -374,15 +400,15 @@
                   {% liquid
                     case settings.pcard_layout
                       when '1'
-                        render 'product-card-1', product: product, image_ratio: image_ratio, show_desc: false, index: forloop.index, animated: animated, animation_effect: animation_effect, remove_params: remove_params
+                        render 'product-card-1', product: product, image_ratio: image_ratio, show_desc: false, show_cart_button: show_cart_button, index: forloop.index, animated: animated, animation_effect: animation_effect, remove_params: remove_params
                       when '2'
-                        render 'product-card-2', product: product, image_ratio: image_ratio, show_desc: false, index: forloop.index, animated: animated, animation_effect: animation_effect, remove_params: remove_params
+                        render 'product-card-2', product: product, image_ratio: image_ratio, show_desc: false, show_cart_button: show_cart_button, index: forloop.index, animated: animated, animation_effect: animation_effect, remove_params: remove_params
                       when '3'
-                        render 'product-card-3', product: product, image_ratio: image_ratio, show_desc: false, index: forloop.index, animated: animated, animation_effect: animation_effect, remove_params: remove_params
+                        render 'product-card-3', product: product, image_ratio: image_ratio, show_desc: false, show_cart_button: show_cart_button, index: forloop.index, animated: animated, animation_effect: animation_effect, remove_params: remove_params
                       when '4'
-                        render 'product-card-4', product: product, image_ratio: image_ratio, show_desc: false, index: forloop.index, animated: animated, animation_effect: animation_effect, remove_params: remove_params
+                        render 'product-card-4', product: product, image_ratio: image_ratio, show_desc: false, show_cart_button: show_cart_button, index: forloop.index, animated: animated, animation_effect: animation_effect, remove_params: remove_params
                       when '5'
-                        render 'product-card-5', product: product, image_ratio: image_ratio, show_desc: false, index: forloop.index, animated: animated, animation_effect: animation_effect, remove_params: remove_params
+                        render 'product-card-5', product: product, image_ratio: image_ratio, show_desc: false, show_cart_button: show_cart_button, index: forloop.index, animated: animated, animation_effect: animation_effect, remove_params: remove_params
                     endcase
                   %}
                 </div>
@@ -402,6 +428,92 @@
     {% endif %}
   </product-recommendations>
 </section>
+<script>
+  (function(){
+    var sectionEl = document.getElementById('m-section--{{ section.id }}');
+    if(!sectionEl) return;
+    var WISHLIST_KEY = 'toyora_wishlist';
+
+    function getWishlist(){
+      try { return JSON.parse(localStorage.getItem(WISHLIST_KEY)) || []; }
+      catch(e){ return []; }
+    }
+    function saveWishlist(list){
+      try { localStorage.setItem(WISHLIST_KEY, JSON.stringify(list)); } catch(e){}
+    }
+    function refreshWishButtons(){
+      var list = getWishlist();
+      sectionEl.querySelectorAll('.toyora-recs-item__wish').forEach(function(btn){
+        var id = btn.getAttribute('data-product-id');
+        var isActive = list.indexOf(id) !== -1;
+        btn.classList.toggle('is-active', isActive);
+        btn.setAttribute('aria-pressed', isActive ? 'true' : 'false');
+      });
+    }
+    function toggleWishlist(btn){
+      var id = btn.getAttribute('data-product-id');
+      if(!id) return;
+      var list = getWishlist();
+      var idx = list.indexOf(id);
+      if(idx === -1) list.push(id);
+      else list.splice(idx, 1);
+      saveWishlist(list);
+      refreshWishButtons();
+      document.dispatchEvent(new CustomEvent('toyora:wishlist:updated', { detail: { wishlist: list } }));
+    }
+    function addToCart(btn){
+      if(btn.disabled || btn.classList.contains('is-loading')) return;
+      var variantId = btn.getAttribute('data-variant-id');
+      if(!variantId) return;
+      btn.classList.add('is-loading');
+      fetch('/cart/add.js', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+        body: JSON.stringify({ id: Number(variantId), quantity: 1 })
+      })
+        .then(function(res){
+          if(!res.ok) return res.json().then(function(err){ throw err; });
+          return res.json();
+        })
+        .then(function(){
+          document.dispatchEvent(new CustomEvent('cart:refresh'));
+          document.dispatchEvent(new CustomEvent('cart:open'));
+          if(window.MinimogTheme && window.MinimogTheme.pubSubEvents){
+            document.dispatchEvent(new CustomEvent(window.MinimogTheme.pubSubEvents.cartUpdate));
+            document.dispatchEvent(new CustomEvent(window.MinimogTheme.pubSubEvents.openCartDrawer));
+          }
+        })
+        .catch(function(err){
+          console.error(err);
+        })
+        .finally(function(){
+          btn.classList.remove('is-loading');
+        });
+    }
+
+    sectionEl.addEventListener('click', function(e){
+      var wishBtn = e.target.closest('.toyora-recs-item__wish');
+      if(wishBtn){
+        e.preventDefault();
+        e.stopPropagation();
+        toggleWishlist(wishBtn);
+        return;
+      }
+      var cartBtn = e.target.closest('.toyora-recs-item__cart');
+      if(cartBtn){
+        e.preventDefault();
+        e.stopPropagation();
+        addToCart(cartBtn);
+      }
+    });
+
+    var recEl = sectionEl.querySelector('product-recommendations');
+    if(recEl && window.MutationObserver){
+      new MutationObserver(function(){ refreshWishButtons(); }).observe(recEl, { childList: true, subtree: true });
+    }
+    refreshWishButtons();
+  })();
+</script>
 
 {% schema %}
 {
@@ -474,20 +586,15 @@
       "default": "h3"
     },
     {
-      "type": "select",
-      "id": "text_align",
-      "label": "Text alignment",
-      "default": "left",
-      "options": [
-        {
-          "value": "left",
-          "label": "Left"
-        },
-        {
-          "value": "center",
-          "label": "Center"
-        }
-      ]
+      "type": "text",
+      "id": "view_all_text",
+      "label": "View all text",
+      "default": "View All"
+    },
+    {
+      "type": "url",
+      "id": "view_all_link",
+      "label": "View all link"
     },
     {
       "type": "header",
@@ -538,6 +645,12 @@
           "label": "4:3"
         }
       ]
+    },
+    {
+      "type": "checkbox",
+      "id": "show_cart_button",
+      "label": "Show add to cart button",
+      "default": false
     },
     {
       "type": "checkbox",
