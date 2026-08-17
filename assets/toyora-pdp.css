@@ -70,7 +70,7 @@
   margin: 6px 0 10px;
 }
 
-.toyora-pdp-price .m-price__sale {
+.toyora-pdp-price .m-price--on-sale .m-price__sale {
   display: flex !important;
   flex-direction: row;
   flex-wrap: nowrap;
@@ -118,10 +118,12 @@
   line-height: 1.2;
 }
 
-.template-product .m-product-meta {
+.template-product .m-product-meta,
+.template-product .toyora-pdp-meta {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  width: 100%;
   gap: 12px;
   list-style: none;
   margin: 0 0 14px;
@@ -133,13 +135,22 @@
   align-items: center;
   gap: 6px;
   margin: 0;
+  padding: 0;
+  flex-shrink: 0;
 }
 
 .template-product .toyora-pdp-meta .m-product-meta--label,
 .template-product .toyora-pdp-meta .m-product-meta--value:not(.m-product-availability) {
-  font-size: 13px;
+  font-size: 14px;
   font-weight: 400;
   color: #6b7280;
+}
+
+.template-product .toyora-pdp-meta__sku .m-product-meta--label,
+.template-product .toyora-pdp-meta__sku .m-product-meta--value {
+  font-size: 14px;
+  font-weight: 700;
+  color: #1a1a37;
 }
 
 .template-product .m-product-availability {
@@ -226,9 +237,14 @@
 
 .toyora-pdp-features__label {
   font-size: 14px;
-  font-weight: 600;
-  color: #1a1a37;
+  font-weight: 500;
+  color: #6b7280;
   line-height: 1.3;
+}
+
+.toyora-pdp-features__label strong {
+  font-weight: 800;
+  color: #1a1a37;
 }
 
 .toyora-pdp-features__icon--purple { background: #7b6cff; }
