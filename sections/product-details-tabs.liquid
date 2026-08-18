@@ -60,6 +60,7 @@
               class="m-tab-header toyora-pdtabs__tab"
               data-block-type="{{ block.type }}"
               data-index="{{ forloop.index0 }}"
+              {% if block.type == 'reviews' %}id="toyora-reviews"{% endif %}
               {{ block.shopify_attributes }}
             >
               <span class="toyora-pdtabs__icon">

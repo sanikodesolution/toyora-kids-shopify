@@ -86,38 +86,6 @@
         {% if settings.review_app == 'ali_reviews' %}
           <div product-id="{{ product.id }}" class="alr-display-review-badge"></div>
         {% endif %}
-        {% liquid
-          assign rating_value = 0
-          assign rating_count = 0
-          if product.metafields.reviews.rating.value != blank
-            assign rating_value = product.metafields.reviews.rating.value.rating | times: 1.0
-            assign rating_count = product.metafields.reviews.rating_count | default: 0
-          endif
-          assign full_stars = rating_value | floor
-          if rating_value == 0
-            assign full_stars = 5
-          endif
-        %}
-        <div class="toyora-pdp-rating">
-          {%- capture app_badge -%}
-            {%- render 'product-reviews-app__badge', product: product -%}
-          {%- endcapture -%}
-          {%- if app_badge != blank -%}
-            <div class="toyora-pdp-rating__app">{{ app_badge }}</div>
-          {%- endif -%}
-          <div class="toyora-pdp-rating__fallback"{% if app_badge != blank %} hidden{% endif %}>
-            <span class="toyora-pdp-rating__stars" aria-hidden="true">
-              {%- for i in (1..5) -%}
-                <svg viewBox="0 0 20 20"><path fill="{% if i <= full_stars %}#FFB800{% else %}#E5E7EB{% endif %}" d="M10 1.5l2.47 5.01 5.53.8-4 3.9.94 5.5L10 14.1l-4.94 2.61.94-5.5-4-3.9 5.53-.8L10 1.5z"/></svg>
-              {%- endfor -%}
-            </span>
-            {%- if rating_count > 0 -%}
-              <span class="toyora-pdp-rating__text">{{ rating_value | round: 1 }} ({{ rating_count }} Reviews)</span>
-            {%- else -%}
-              <span class="toyora-pdp-rating__text">No reviews yet</span>
-            {%- endif -%}
-          </div>
-        </div>
       {%- when 'price' -%}
         <div class="product-block-group--price toyora-pdp-price">
           {% render 'product-prices',
@@ -125,9 +93,10 @@
             product: product,
             show_sale_badge: true,
             pdp_styled: true,
-            sale_badge_format: 'percent_off',
+            sale_badge_format: 'save_percent',
             sale_badge_type: block.settings.sale_badge_type | default: 'percentage'
           %}
+          {% render 'toyora-pdp-rating', product: product %}
         </div>
         {%- if shop.taxes_included -%}
           <div class="m-product-tax">

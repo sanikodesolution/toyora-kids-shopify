@@ -108,8 +108,10 @@
             endif
           %}
           <div class="m-price__badge-sale" data-type="{{ sale_badge_type }}">
-            <span class="m-product-tag m-product-tag--sale{% if pdp_styled %} toyora-pdp-price__off{% endif %}{% unless sale_badge_format == 'percent_off' %} m-gradient m-color-{{ settings.sale_badge_color_scheme }}{% endunless %}">
-              {% if sale_badge_format == 'percent_off' %}
+            <span class="m-product-tag m-product-tag--sale{% if pdp_styled %} toyora-pdp-price__off{% endif %}{% unless sale_badge_format == 'percent_off' or sale_badge_format == 'save_percent' %} m-gradient m-color-{{ settings.sale_badge_color_scheme }}{% endunless %}">
+              {% if sale_badge_format == 'save_percent' %}
+                SAVE {{ discount }}
+              {% elsif sale_badge_format == 'percent_off' %}
                 {{ discount }} OFF
               {% elsif sale_badge_type != 'text' %}
                 {% render 'new-locale', key: 'products.product.save_html', param: '{{ amount }}', value: discount %}

@@ -30,6 +30,35 @@ if (!customElements.get("m-product-details-tabs")) {
         });
       }
     }
+
+    openReviewsTab() {
+      const header = this.querySelector('.m-tab-header[data-block-type="reviews"]');
+      if (!header) return;
+      const index = Number(header.dataset.index);
+      if (this.tabs && !Number.isNaN(index)) {
+        this.tabs.setActiveTab(index);
+      } else {
+        header.click();
+      }
+      this.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
   }
   customElements.define("m-product-details-tabs", MProductDetailsTabs);
+
+  if (!window.toyoraReviewsBound) {
+    window.toyoraReviewsBound = true;
+    document.addEventListener("click", (event) => {
+      const trigger = event.target.closest("[data-toyora-open-reviews]");
+      if (!trigger) return;
+      event.preventDefault();
+      const tabs = document.querySelector("m-product-details-tabs");
+      if (tabs && typeof tabs.openReviewsTab === "function") {
+        tabs.openReviewsTab();
+      } else if (tabs) {
+        const header = tabs.querySelector('.m-tab-header[data-block-type="reviews"]');
+        if (header) header.click();
+        tabs.scrollIntoView({ behavior: "smooth", block: "start" });
+      }
+    });
+  }
 }
