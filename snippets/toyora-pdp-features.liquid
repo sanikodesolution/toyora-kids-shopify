@@ -1,40 +1,142 @@
+{%- comment -%}
+  Product feature chips. Priority:
+  1. custom.pdp_features / custom.features metafield
+  2. product tags starting with feature__
+  3. auto list from product title/type
+{%- endcomment -%}
 {%- liquid
-  assign f1 = section.settings.pdp_feature_1 | default: '4 Wheel Drive'
-  assign f2 = section.settings.pdp_feature_2 | default: 'Rechargeable Battery'
-  assign f3 = section.settings.pdp_feature_3 | default: '360° Rotation'
-  assign f4 = section.settings.pdp_feature_4 | default: 'Light & Music'
-  assign f5 = section.settings.pdp_feature_5 | default: 'LED Lights'
-  assign f6 = section.settings.pdp_feature_6 | default: 'Durable & Shockproof'
-  assign f7 = section.settings.pdp_feature_7 | default: 'High Speed'
-  assign f8 = section.settings.pdp_feature_8
-  assign colors = 'blue,green,purple,pink,blue,orange,green,purple' | split: ','
-  assign feature_blob = f1 | append: '||' | append: f2 | append: '||' | append: f3 | append: '||' | append: f4 | append: '||' | append: f5 | append: '||' | append: f6 | append: '||' | append: f7 | append: '||' | append: f8
-  assign feature_list = feature_blob | split: '||'
+  assign feature_list = ''
+  assign mf_features = product.metafields.custom.pdp_features.value | default: product.metafields.custom.features.value
+
+  if mf_features != blank
+    if mf_features.first
+      for item in mf_features
+        if item != blank
+          assign feature_list = feature_list | append: item | append: '||'
+        endif
+      endfor
+    else
+      assign feature_list = mf_features | replace: ', ', '||' | replace: ',', '||' | append: '||'
+    endif
+  endif
+
+  if feature_list == blank
+    for tag in product.tags
+      assign tag_down = tag | downcase
+      if tag_down contains 'feature__'
+        assign tag_feature = tag | split: '__' | last
+        if tag_feature != blank
+          assign feature_list = feature_list | append: tag_feature | append: '||'
+        endif
+      endif
+    endfor
+  endif
+
+  if feature_list == blank
+    assign haystack = product.title | append: ' ' | append: product.type | append: ' ' | append: product.handle | downcase
+    if haystack contains 'bubble'
+      assign feature_list = 'Automatic Bubbles||Rechargeable Battery||LED Lights||Easy Refill||Safe for Kids||Outdoor Play||Durable Design||'
+    elsif haystack contains 'remote' or haystack contains 'rc-' or haystack contains 'rc ' or haystack contains 'car' or haystack contains 'truck' or haystack contains 'racing'
+      assign feature_list = '4 Wheel Drive||Rechargeable Battery||360° Rotation||Light & Music||LED Lights||Durable & Shockproof||High Speed||'
+    elsif haystack contains 'doll' or haystack contains 'teddy' or haystack contains 'plush'
+      assign feature_list = 'Soft & Huggable||Safe for Kids||Premium Fabric||Easy to Clean||Gift Ready||Durable Stitching||'
+    elsif haystack contains 'gun' or haystack contains 'blaster' or haystack contains 'shooter'
+      assign feature_list = 'Easy to Use||Safe for Kids||Indoor & Outdoor||Durable Design||Fun Playtime||Lightweight||'
+    else
+      assign f1 = section.settings.pdp_feature_1
+      assign f2 = section.settings.pdp_feature_2
+      assign f3 = section.settings.pdp_feature_3
+      assign f4 = section.settings.pdp_feature_4
+      assign f5 = section.settings.pdp_feature_5
+      assign f6 = section.settings.pdp_feature_6
+      assign f7 = section.settings.pdp_feature_7
+      assign f8 = section.settings.pdp_feature_8
+      if f1 != blank or f2 != blank or f3 != blank
+        assign feature_list = f1 | append: '||' | append: f2 | append: '||' | append: f3 | append: '||' | append: f4 | append: '||' | append: f5 | append: '||' | append: f6 | append: '||' | append: f7 | append: '||' | append: f8 | append: '||'
+      endif
+    endif
+  endif
+
+  assign features = feature_list | split: '||'
+  assign colors = 'purple,green,purple,pink,blue,orange,red,green' | split: ','
 -%}
-<div class="toyora-pdp-features">
-  {%- for feature in feature_list -%}
-    {%- if feature != blank -%}
-      <div class="toyora-pdp-features__item">
-        <span class="toyora-pdp-features__icon toyora-pdp-features__icon--{{ colors[forloop.index0] }}">
-          {%- case forloop.index0 -%}
-            {%- when 0 -%}
-              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M5 11h3V8H5v3zm4 0h3V8H9v3zm4 0h3V8h-3v3zM5 16h3v-3H5v3zm4 0h3v-3H9v3zm4 0h3v-3h-3v3zM3 6h16v12H3V6z"/></svg>
-            {%- when 1 -%}
-              <svg viewBox="0 0 24 24" fill="none"><rect x="7" y="6" width="10" height="14" rx="2" stroke="currentColor" stroke-width="1.8"/><path d="M10 9h4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
-            {%- when 2 -%}
-              <svg viewBox="0 0 24 24" fill="none"><path d="M12 5a7 7 0 1 1-6.3 4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><path d="M5 4.5v4h4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
-            {%- when 3 -%}
-              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M9 16a3 3 0 0 0 6 0V8a3 3 0 0 0-6 0v8z"/></svg>
-            {%- when 4 -%}
-              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M9 21h6v-2H9v2zm3-19C8.1 2 5 5.1 5 9c0 2.4 1.2 4.5 3 5.7V17h8v-2.3c1.8-1.2 3-3.3 3-5.7 0-3.9-3.1-7-7-7z"/></svg>
-            {%- when 5 -%}
-              <svg viewBox="0 0 24 24" fill="none"><path d="M12 3 4 7v5c0 5 3.4 8.6 8 10 4.6-1.4 8-5 8-10V7l-8-4z" stroke="currentColor" stroke-width="1.8"/></svg>
-            {%- else -%}
-              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M13 2 4 14h7l-1 8 10-14h-7z"/></svg>
-          {%- endcase -%}
-        </span>
-        <span class="toyora-pdp-features__label">{{ feature }}</span>
-      </div>
-    {%- endif -%}
-  {%- endfor -%}
-</div>
+{%- if feature_list != blank -%}
+  <div class="toyora-pdp-features">
+    {%- for feature in features -%}
+      {%- if feature != blank -%}
+        {%- assign f_down = feature | downcase -%}
+        {%- assign icon_mod = 'spark' -%}
+        {%- if f_down contains 'wheel' or f_down contains 'drive' or f_down contains 'car' -%}
+          {%- assign icon_mod = 'car' -%}
+        {%- elsif f_down contains 'battery' or f_down contains 'recharge' -%}
+          {%- assign icon_mod = 'battery' -%}
+        {%- elsif f_down contains '360' or f_down contains 'rotat' or f_down contains 'spin' -%}
+          {%- assign icon_mod = 'rotate' -%}
+        {%- elsif f_down contains 'music' or f_down contains 'sound' -%}
+          {%- assign icon_mod = 'music' -%}
+        {%- elsif f_down contains 'led' or f_down contains 'light' -%}
+          {%- assign icon_mod = 'light' -%}
+        {%- elsif f_down contains 'durable' or f_down contains 'shock' or f_down contains 'safe' -%}
+          {%- assign icon_mod = 'shield' -%}
+        {%- elsif f_down contains 'speed' or f_down contains 'fast' -%}
+          {%- assign icon_mod = 'speed' -%}
+        {%- elsif f_down contains 'bubble' -%}
+          {%- assign icon_mod = 'bubble' -%}
+        {%- elsif f_down contains 'refill' or f_down contains 'water' -%}
+          {%- assign icon_mod = 'refill' -%}
+        {%- elsif f_down contains 'kid' or f_down contains 'child' or f_down contains 'soft' -%}
+          {%- assign icon_mod = 'kids' -%}
+        {%- elsif f_down contains 'outdoor' or f_down contains 'play' or f_down contains 'fun' -%}
+          {%- assign icon_mod = 'play' -%}
+        {%- elsif f_down contains 'auto' -%}
+          {%- assign icon_mod = 'auto' -%}
+        {%- endif -%}
+        <div class="toyora-pdp-features__item">
+          <span class="toyora-pdp-features__icon toyora-pdp-features__icon--{{ colors[forloop.index0] }}">
+            {%- case icon_mod -%}
+              {%- when 'car' -%}
+                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M5 11h3V8H5v3zm4 0h3V8H9v3zm4 0h3V8h-3v3zM5 16h3v-3H5v3zm4 0h3v-3H9v3zm4 0h3v-3h-3v3zM3 6h16v12H3V6z"/></svg>
+              {%- when 'battery' -%}
+                <svg viewBox="0 0 24 24" fill="none"><rect x="7" y="6" width="10" height="14" rx="2" stroke="currentColor" stroke-width="1.8"/><path d="M10 9h4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+              {%- when 'rotate' -%}
+                <svg viewBox="0 0 24 24" fill="none"><path d="M12 5a7 7 0 1 1-6.3 4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><path d="M5 4.5v4h4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+              {%- when 'music' -%}
+                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M9 16a3 3 0 0 0 6 0V8a3 3 0 0 0-6 0v8z"/></svg>
+              {%- when 'light' -%}
+                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M9 21h6v-2H9v2zm3-19C8.1 2 5 5.1 5 9c0 2.4 1.2 4.5 3 5.7V17h8v-2.3c1.8-1.2 3-3.3 3-5.7 0-3.9-3.1-7-7-7z"/></svg>
+              {%- when 'shield' -%}
+                <svg viewBox="0 0 24 24" fill="none"><path d="M12 3 4 7v5c0 5 3.4 8.6 8 10 4.6-1.4 8-5 8-10V7l-8-4z" stroke="currentColor" stroke-width="1.8"/></svg>
+              {%- when 'speed' -%}
+                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M13 2 4 14h7l-1 8 10-14h-7z"/></svg>
+              {%- when 'bubble' -%}
+                <svg viewBox="0 0 24 24" fill="none"><circle cx="8.5" cy="13" r="3.2" stroke="currentColor" stroke-width="1.7"/><circle cx="15.2" cy="8.5" r="4" stroke="currentColor" stroke-width="1.7"/><circle cx="16" cy="16.5" r="2.2" stroke="currentColor" stroke-width="1.7"/></svg>
+              {%- when 'refill' -%}
+                <svg viewBox="0 0 24 24" fill="none"><path d="M12 3s5.5 6.4 5.5 11A5.5 5.5 0 1 1 6.5 14C6.5 9.4 12 3 12 3z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg>
+              {%- when 'kids' -%}
+                <svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="8" stroke="currentColor" stroke-width="1.8"/><path d="M8.5 13.5c.8 1.4 2.1 2.2 3.5 2.2s2.7-.8 3.5-2.2" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><circle cx="9" cy="10" r="1" fill="currentColor"/><circle cx="15" cy="10" r="1" fill="currentColor"/></svg>
+              {%- when 'play' -%}
+                <svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="3.2" stroke="currentColor" stroke-width="1.8"/><path d="M12 5v1.5M12 17.5V19M5 12h1.5M17.5 12H19M7.2 7.2l1.1 1.1M15.7 15.7l1.1 1.1M16.8 7.2l-1.1 1.1M8.3 15.7l-1.1 1.1" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+              {%- when 'auto' -%}
+                <svg viewBox="0 0 24 24" fill="none"><path d="M8 14.5 12 5l4 9.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><path d="M9.2 12h5.6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><path d="M7 18h10" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+              {%- else -%}
+                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M13 2 4 14h7l-1 8 10-14h-7z"/></svg>
+            {%- endcase -%}
+          </span>
+          <span class="toyora-pdp-features__label">
+            {%- assign words = feature | split: ' ' -%}
+            {%- assign strong_from = words.size | minus: 2 -%}
+            {%- if strong_from < 0 -%}{%- assign strong_from = 0 -%}{%- endif -%}
+            {%- for word in words -%}
+              {%- if forloop.index0 >= strong_from -%}
+                <strong>{{ word }}</strong>
+              {%- else -%}
+                {{ word }}
+              {%- endif -%}
+              {%- unless forloop.last -%}{{ ' ' }}{%- endunless -%}
+            {%- endfor -%}
+          </span>
+        </div>
+      {%- endif -%}
+    {%- endfor -%}
+  </div>
+{%- endif -%}
