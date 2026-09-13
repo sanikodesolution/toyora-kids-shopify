@@ -88,14 +88,7 @@
         {% endif %}
       {%- when 'price' -%}
         <div class="product-block-group--price toyora-pdp-price">
-          {% render 'product-prices',
-            use_variant: true,
-            product: product,
-            show_sale_badge: true,
-            pdp_styled: true,
-            sale_badge_format: 'save_percent',
-            sale_badge_type: block.settings.sale_badge_type | default: 'percentage'
-          %}
+          {% render 'product-prices', use_variant: true, product: product, show_sale_badge: true, pdp_styled: true, sale_badge_format: 'save_percent', sale_badge_type: block.settings.sale_badge_type, default: 'percentage' %}
           {% render 'toyora-pdp-rating', product: product %}
         </div>
         {%- if shop.taxes_included -%}
@@ -915,3 +908,23 @@
     {%- endcase -%}
   </div>
 {%- endfor -%}
+{% comment %}
+
+This file has been rewritten to preserve the original behavior.
+
+---
+Changes:
+- from: |-
+    {% render 'product-prices',
+                use_variant: true,
+                product: product,
+                show_sale_badge: true,
+                pdp_styled: true,
+                sale_badge_format: 'save_percent',
+                sale_badge_type: block.settings.sale_badge_type | default: 'percentage'
+              %}
+  to: "{% render 'product-prices', use_variant: true, product: product, show_sale_badge:
+    true, pdp_styled: true, sale_badge_format: 'save_percent', sale_badge_type: block.settings.sale_badge_type,
+    default: 'percentage' %}"
+  position: 3494..3708
+{% endcomment %}
